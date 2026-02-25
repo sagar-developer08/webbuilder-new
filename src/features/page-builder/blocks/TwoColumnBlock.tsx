@@ -1,14 +1,23 @@
+const ALLOWED_CHILDREN = [
+    "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
+    "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
+    "Icon", "Embed", "Link", "Form", "Input", "Textarea", "Select",
+    "Checkbox", "Radio", "SubmitButton", "OrderedList", "UnorderedList",
+    "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer",
+    "Table", "Accordion", "Tabs", "Card", "Container",
+];
+
 export const TwoColumnBlock = {
     fields: {
         gap: { type: "text" },
         // Slot fields for left and right columns
         left: {
             type: "slot",
-            allow: ["Section", "Heading", "Paragraph", "Button", "Image", "Container"],
+            allow: ALLOWED_CHILDREN,
         },
         right: {
             type: "slot",
-            allow: ["Section", "Heading", "Paragraph", "Button", "Image", "Container"],
+            allow: ALLOWED_CHILDREN,
         },
     },
 

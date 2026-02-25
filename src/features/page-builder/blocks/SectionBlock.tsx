@@ -9,7 +9,14 @@ export const SectionBlock = {
         // Slot field for nested content
         children: {
             type: "slot",
-            allow: ["Heading", "Paragraph", "Button", "Image", "Container", "TwoColumn"],
+            allow: [
+                "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
+                "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
+                "Icon", "Embed", "Link", "Form", "Input", "Textarea", "Select",
+                "Checkbox", "Radio", "SubmitButton", "OrderedList", "UnorderedList",
+                "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer",
+                "Table", "Accordion", "Tabs", "Card", "Container", "TwoColumn",
+            ],
         },
     },
 

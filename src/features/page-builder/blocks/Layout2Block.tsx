@@ -1,3 +1,5 @@
+import "./blocks-responsive.css";
+
 const ALLOWED_CHILDREN = [
     "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
     "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
@@ -14,6 +16,7 @@ export const Layout2Block = {
     fields: {
         gap: { type: "text" },
         sidebarWidth: { type: "text" },
+        sidebarHeight: { type: "text" },
         sidebar: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -27,13 +30,15 @@ export const Layout2Block = {
     defaultProps: {
         gap: "20px",
         sidebarWidth: "280px",
+        sidebarHeight: "100vh",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, sidebarWidth, sidebar: Sidebar, main: Main } = props;
+        const { editMode: isEdit, gap, sidebarWidth, sidebarHeight, sidebar: Sidebar, main: Main } = props;
 
         return (
             <div
+                className="pb-layout2"
                 style={{
                     display: "flex",
                     flexWrap: "wrap",
@@ -62,8 +67,10 @@ export const Layout2Block = {
 
                 {/* Sidebar left */}
                 <div
+                    className="pb-sidebar"
                     style={{
                         flex: `0 0 ${sidebarWidth}`,
+                        height: sidebarHeight,
                         minHeight: isEdit ? "120px" : undefined,
                     }}
                 >
@@ -72,6 +79,7 @@ export const Layout2Block = {
 
                 {/* Main content right */}
                 <div
+                    className="pb-col"
                     style={{
                         flex: "1 1 0%",
                         minWidth: 0,

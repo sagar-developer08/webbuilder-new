@@ -1,3 +1,5 @@
+import "./blocks-responsive.css";
+
 const ALLOWED_CHILDREN = [
     "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
     "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
@@ -44,6 +46,7 @@ export const Grid2x2Block = {
 
         return (
             <div
+                className="pb-grid2x2"
                 style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",

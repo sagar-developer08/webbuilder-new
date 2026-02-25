@@ -1,0 +1,109 @@
+/* ============================================
+   Page Builder Blocks — Responsive Overrides
+   ============================================ */
+
+/* ---- Layout2: sidebar + main ---- */
+.pb-layout2 {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* ---- TwoColumn ---- */
+.pb-two-col {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* ---- ThreeColumn ---- */
+.pb-three-col {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* ---- Grid2x2 ---- */
+.pb-grid2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ---- Column children ---- */
+.pb-col {
+  min-width: 0;
+}
+
+/* ---- Sidebar ---- */
+.pb-sidebar {
+  min-width: 0;
+}
+
+/* ---- Chart container ---- */
+.pb-chart {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ============================================
+   Tablet  (≤ 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+  /* Layout2 sidebar stacks on top */
+  .pb-layout2 {
+    flex-direction: column;
+  }
+  .pb-layout2 > .pb-sidebar {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+  .pb-layout2 > .pb-col {
+    flex: 1 1 100% !important;
+  }
+
+  /* Grid2x2 stays 2 cols on tablet */
+  .pb-grid2x2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ============================================
+   Mobile  (≤ 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  /* TwoColumn stacks */
+  .pb-two-col {
+    flex-direction: column;
+  }
+  .pb-two-col > .pb-col {
+    flex: 1 1 100% !important;
+  }
+
+  /* ThreeColumn stacks */
+  .pb-three-col {
+    flex-direction: column;
+  }
+  .pb-three-col > .pb-col {
+    flex: 1 1 100% !important;
+  }
+
+  /* Grid2x2 goes single col */
+  .pb-grid2x2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Charts get smaller height */
+  .pb-chart {
+    min-height: 200px;
+  }
+}
+
+/* ============================================
+   Small Mobile  (≤ 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  /* Further reduce padding for small screens */
+  .pb-layout2,
+  .pb-two-col,
+  .pb-three-col,
+  .pb-grid2x2 {
+    gap: 12px !important;
+  }
+}

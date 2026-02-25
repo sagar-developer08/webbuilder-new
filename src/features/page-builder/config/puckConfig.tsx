@@ -67,6 +67,11 @@ import { AccordionBlock } from "../blocks/AccordionBlock";
 import { TabsBlock } from "../blocks/TabsBlock";
 import { CardBlock } from "../blocks/CardBlock";
 
+// Chart blocks
+import { BarChartBlock } from "../blocks/BarChartBlock";
+import { DoughnutChartBlock } from "../blocks/DoughnutChartBlock";
+import { AreaChartBlock } from "../blocks/AreaChartBlock";
+
 export const config: Config = {
   components: {
     // Layout
@@ -135,6 +140,11 @@ export const config: Config = {
     Accordion: AccordionBlock,
     Tabs: TabsBlock,
     Card: CardBlock,
+
+    // Charts
+    BarChart: BarChartBlock,
+    DoughnutChart: DoughnutChartBlock,
+    AreaChart: AreaChartBlock,
   },
   categories: {
     Layout: {
@@ -163,6 +173,9 @@ export const config: Config = {
     },
     Content: {
       components: ["OrderedList", "UnorderedList", "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer", "Table", "Accordion", "Tabs", "Card"],
+    },
+    Charts: {
+      components: ["BarChart", "DoughnutChart", "AreaChart"],
     },
   },
 };

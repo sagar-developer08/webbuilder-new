@@ -1,3 +1,5 @@
+import "./blocks-responsive.css";
+
 const ALLOWED_CHILDREN = [
     "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
     "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
@@ -33,6 +35,7 @@ export const TwoColumnBlock = {
 
         return (
             <div
+                className="pb-two-col"
                 style={{
                     display: "flex",
                     flexWrap: "wrap",
@@ -60,6 +63,7 @@ export const TwoColumnBlock = {
                 )}
 
                 <div
+                    className="pb-col"
                     style={{
                         flex: "1 1 300px",
                         minWidth: 0,
@@ -69,6 +73,7 @@ export const TwoColumnBlock = {
                     <Left />
                 </div>
                 <div
+                    className="pb-col"
                     style={{
                         flex: "1 1 300px",
                         minWidth: 0,

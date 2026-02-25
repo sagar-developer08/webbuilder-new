@@ -11,6 +11,7 @@ export const Sidebar2RowBlock = {
     fields: {
         gap: { type: "text" },
         sidebarWidth: { type: "text" },
+        sidebarHeight: { type: "text" },
         sidebar: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -28,6 +29,7 @@ export const Sidebar2RowBlock = {
     defaultProps: {
         gap: "20px",
         sidebarWidth: "250px",
+        sidebarHeight: "100vh",
     },
 
     render: (props: any) => {
@@ -35,6 +37,7 @@ export const Sidebar2RowBlock = {
             editMode: isEdit,
             gap,
             sidebarWidth,
+            sidebarHeight,
             sidebar: Sidebar,
             top: Top,
             bottom: Bottom,
@@ -72,6 +75,7 @@ export const Sidebar2RowBlock = {
                 <div
                     style={{
                         flex: `0 0 ${sidebarWidth}`,
+                        height: sidebarHeight,
                         minHeight: isEdit ? "120px" : undefined,
                     }}
                 >

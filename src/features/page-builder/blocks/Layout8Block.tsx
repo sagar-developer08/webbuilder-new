@@ -14,6 +14,7 @@ export const Layout8Block = {
     fields: {
         gap: { type: "text" },
         sidebarWidth: { type: "text" },
+        sidebarHeight: { type: "text" },
         main: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -27,10 +28,11 @@ export const Layout8Block = {
     defaultProps: {
         gap: "20px",
         sidebarWidth: "280px",
+        sidebarHeight: "100vh",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, sidebarWidth, main: Main, sidebar: Sidebar } = props;
+        const { editMode: isEdit, gap, sidebarWidth, sidebarHeight, main: Main, sidebar: Sidebar } = props;
 
         return (
             <div
@@ -75,6 +77,7 @@ export const Layout8Block = {
                 <div
                     style={{
                         flex: `0 0 ${sidebarWidth}`,
+                        height: sidebarHeight,
                         minHeight: isEdit ? "120px" : undefined,
                     }}
                 >

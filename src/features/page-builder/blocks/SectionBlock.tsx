@@ -6,6 +6,12 @@ export const SectionBlock = {
         padding: {
             type: "text",
         },
+        height: {
+            type: "text",
+        },
+        width: {
+            type: "text",
+        },
         // Slot field for nested content
         children: {
             type: "slot",
@@ -26,16 +32,20 @@ export const SectionBlock = {
     defaultProps: {
         backgroundColor: "#ffffff",
         padding: "60px",
+        height: "auto",
+        width: "auto",
     },
 
     render: (props: any) => {
-        const { backgroundColor, padding, editMode, children: Children } = props;
+        const { backgroundColor, padding, height, width, editMode, children: Children } = props;
 
         return (
             <section
                 style={{
                     backgroundColor,
                     padding,
+                    height,
+                    width,
                     border: editMode ? "2px dashed #3b82f6" : "none",
                     minHeight: editMode ? "120px" : undefined,
                     position: "relative",

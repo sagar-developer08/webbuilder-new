@@ -1,0 +1,14 @@
+@use '../../../styles/abstracts/variables' as *;
+
+.lazyImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity $transition-base;
+
+  &[src=''] {
+    background: hsl(var(--muted));
+    min-height: 200px;
+  }
+}
+

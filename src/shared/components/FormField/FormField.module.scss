@@ -1,0 +1,61 @@
+@use '../../../styles/abstracts/variables' as *;
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.label {
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+}
+
+.input {
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid hsl(var(--border));
+  border-radius: $radius-md;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color $transition-base, box-shadow $transition-base;
+
+  &:focus {
+    outline: none;
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+  }
+
+  &::placeholder {
+    color: hsl(var(--muted-foreground));
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.error {
+    border-color: hsl(var(--destructive));
+
+    &:focus {
+      border-color: hsl(var(--destructive));
+      box-shadow: 0 0 0 2px hsl(var(--destructive) / 0.2);
+    }
+  }
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+.errorMessage {
+  font-size: 0.875rem;
+  color: hsl(var(--destructive));
+  margin-top: -$spacing-xs;
+}
+

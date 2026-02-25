@@ -1,0 +1,34 @@
+@use '../../../styles/abstracts/variables' as *;
+
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+  padding: $spacing-xl;
+}
+
+.container {
+  width: 100%;
+  max-width: 450px;
+  background: hsl(var(--card));
+  border-radius: $radius-lg;
+  padding: $spacing-2xl;
+  box-shadow: $shadow-lg;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+  color: hsl(var(--foreground));
+  text-align: center;
+}
+
+.subtitle {
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+  margin-bottom: $spacing-xl;
+}
+

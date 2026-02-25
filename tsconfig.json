@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    /* ⚠️ IMPORTANT: This is a global TypeScript configuration.
+     * Changes affect type checking across the entire project.
+     * Modifications should be reviewed and approved. */
+
+    /* Language and Environment */
+    "target": "ES2020", // Modern JavaScript features
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // Include DOM types
+    "useDefineForClassFields": true,
+
+    /* Modules */
+    "module": "ESNext", // Use ES modules
+    "moduleResolution": "bundler", // Vite's bundler resolution
+    "resolveJsonModule": true, // Allow importing JSON files
+    "allowImportingTsExtensions": true, // Allow .ts extensions in imports
+    "isolatedModules": true, // Ensure each file can be safely transpiled
+    "noEmit": true, // Don't emit files (Vite handles this)
+
+    /* JSX */
+    "jsx": "react-jsx", // Use the new JSX transform
+
+    /* Type Checking - STRICT MODE */
+    "strict": true, // Enable all strict type checking options
+    "noUnusedLocals": true, // Error on unused local variables
+    "noUnusedParameters": true, // Error on unused parameters
+    "noFallthroughCasesInSwitch": true, // Error on fallthrough in switch
+    "noImplicitReturns": true, // Error on functions without return
+    "noUncheckedIndexedAccess": true, // Require index access checks
+    "forceConsistentCasingInFileNames": true, // Enforce consistent file naming
+
+    /* Path Aliases - DO NOT MODIFY WITHOUT REVIEW */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

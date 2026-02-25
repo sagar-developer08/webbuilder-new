@@ -1,0 +1,71 @@
+@use '../../../../styles/abstracts/variables' as *;
+
+.postsTable {
+  width: 100%;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: $radius-lg;
+}
+
+.idColumn {
+  width: 60px;
+  text-align: center;
+}
+
+.titleColumn {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.bodyColumn {
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.userColumn {
+  width: 80px;
+  text-align: center;
+}
+
+.actionsColumn {
+  width: 150px;
+}
+
+.titleCell {
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bodyCell {
+  color: hsl(var(--muted-foreground));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+  max-height: 2.8em;
+}
+
+.actions {
+  display: flex;
+  gap: $spacing-xs;
+  flex-wrap: wrap;
+}
+
+.loading,
+.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-2xl;
+  color: hsl(var(--muted-foreground));
+  min-height: 200px;
+}
+

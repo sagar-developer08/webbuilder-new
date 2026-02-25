@@ -1,0 +1,24 @@
+@use '../../../../styles/abstracts/variables' as *;
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: $spacing-xl;
+}
+
+.error {
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+  font-size: 0.875rem;
+}
+
+.submitButton {
+  width: 100%;
+  margin-top: $spacing-md;
+}
+

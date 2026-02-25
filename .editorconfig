@@ -1,0 +1,29 @@
+# EditorConfig - Global Editor Configuration
+# https://editorconfig.org
+#
+# ⚠️ IMPORTANT: This file ensures consistent coding styles across different editors.
+# Changes should be reviewed and approved.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+insert_final_newline = false
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.{js,jsx,ts,tsx,scss,css}]
+indent_size = 2
+
+[Makefile]
+indent_style = tab
+

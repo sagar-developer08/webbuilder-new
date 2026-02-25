@@ -1,0 +1,64 @@
+@use '../../../styles/abstracts/variables' as *;
+
+.dashboard {
+  min-height: 100vh;
+  padding: $spacing-xl;
+  background: hsl(var(--background));
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-xl;
+  gap: $spacing-lg;
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+  }
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+  color: hsl(var(--foreground));
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.formCard {
+  margin-bottom: $spacing-lg;
+}
+
+.cancelButton {
+  margin-top: $spacing-md;
+}
+
+.postsCard {
+  width: 100%;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  color: hsl(var(--destructive));
+  font-size: 1.125rem;
+}
+

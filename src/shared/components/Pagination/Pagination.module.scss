@@ -1,0 +1,50 @@
+@use '../../../styles/abstracts/variables' as *;
+
+.pagination {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  align-items: center;
+  padding: $spacing-lg 0;
+
+  @media (min-width: $breakpoint-md) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.info {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+
+  @media (min-width: $breakpoint-md) {
+    text-align: left;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.pageButton {
+  min-width: 40px;
+}
+
+.ellipsis {
+  padding: 0 $spacing-sm;
+  color: hsl(var(--muted-foreground));
+  user-select: none;
+}
+

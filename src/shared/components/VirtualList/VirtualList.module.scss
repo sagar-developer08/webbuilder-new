@@ -1,0 +1,11 @@
+.virtualList {
+  position: relative;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.item {
+  position: relative;
+  width: 100%;
+}
+

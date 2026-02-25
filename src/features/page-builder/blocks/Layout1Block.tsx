@@ -5,39 +5,46 @@ const ALLOWED_CHILDREN = [
     "Checkbox", "Radio", "SubmitButton", "OrderedList", "UnorderedList",
     "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer",
     "Table", "Accordion", "Tabs", "Card", "Container",
-    "ThreeColumn", "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
-    "Sidebar2Row", "Grid2x2", "Layout1", "Layout2", "Layout3",
-    "Layout4", "Layout5", "Layout6", "Layout7", "Layout8",
 ];
 
-export const TwoColumnBlock = {
+/**
+ * Layout 1: Full-width hero + 3 columns below
+ */
+export const Layout1Block = {
     fields: {
         gap: { type: "text" },
-        // Slot fields for left and right columns
-        left: {
+        hero: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
-        right: {
+        col1: {
+            type: "slot",
+            allow: ALLOWED_CHILDREN,
+        },
+        col2: {
+            type: "slot",
+            allow: ALLOWED_CHILDREN,
+        },
+        col3: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
     },
 
     defaultProps: {
-        gap: "40px",
+        gap: "20px",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, left: Left, right: Right } = props;
+        const { editMode: isEdit, gap, hero: Hero, col1: Col1, col2: Col2, col3: Col3 } = props;
 
         return (
             <div
                 style={{
                     display: "flex",
-                    flexWrap: "wrap",
+                    flexDirection: "column",
                     gap,
-                    border: isEdit ? "2px dashed #f59e0b" : "none",
+                    border: isEdit ? "2px dashed #6366f1" : "none",
                     padding: isEdit ? "20px" : undefined,
                     position: "relative",
                 }}
@@ -48,34 +55,33 @@ export const TwoColumnBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#f59e0b",
+                            background: "#6366f1",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
                             borderRadius: "4px",
                         }}
                     >
-                        Two Column
+                        Layout 1
                     </span>
                 )}
 
-                <div
-                    style={{
-                        flex: "1 1 300px",
-                        minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
-                    }}
-                >
-                    <Left />
+                {/* Full-width hero */}
+                <div style={{ minHeight: isEdit ? "80px" : undefined }}>
+                    <Hero />
                 </div>
-                <div
-                    style={{
-                        flex: "1 1 300px",
-                        minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
-                    }}
-                >
-                    <Right />
+
+                {/* 3 columns below */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap }}>
+                    <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
+                        <Col1 />
+                    </div>
+                    <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
+                        <Col2 />
+                    </div>
+                    <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
+                        <Col3 />
+                    </div>
                 </div>
             </div>
         );

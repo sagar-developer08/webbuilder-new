@@ -5,15 +5,11 @@ const ALLOWED_CHILDREN = [
     "Checkbox", "Radio", "SubmitButton", "OrderedList", "UnorderedList",
     "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer",
     "Table", "Accordion", "Tabs", "Card", "Container",
-    "ThreeColumn", "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
-    "Sidebar2Row", "Grid2x2", "Layout1", "Layout2", "Layout3",
-    "Layout4", "Layout5", "Layout6", "Layout7", "Layout8",
 ];
 
-export const TwoColumnBlock = {
+export const TwoColFooterBlock = {
     fields: {
         gap: { type: "text" },
-        // Slot fields for left and right columns
         left: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -22,22 +18,26 @@ export const TwoColumnBlock = {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
+        footer: {
+            type: "slot",
+            allow: ALLOWED_CHILDREN,
+        },
     },
 
     defaultProps: {
-        gap: "40px",
+        gap: "20px",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, left: Left, right: Right } = props;
+        const { editMode: isEdit, gap, left: Left, right: Right, footer: Footer } = props;
 
         return (
             <div
                 style={{
                     display: "flex",
-                    flexWrap: "wrap",
+                    flexDirection: "column",
                     gap,
-                    border: isEdit ? "2px dashed #f59e0b" : "none",
+                    border: isEdit ? "2px dashed #f97316" : "none",
                     padding: isEdit ? "20px" : undefined,
                     position: "relative",
                 }}
@@ -48,34 +48,48 @@ export const TwoColumnBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#f59e0b",
+                            background: "#f97316",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
                             borderRadius: "4px",
                         }}
                     >
-                        Two Column
+                        2 Col + Footer
                     </span>
                 )}
 
+                {/* Two columns on top */}
                 <div
                     style={{
-                        flex: "1 1 300px",
-                        minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap,
                     }}
                 >
-                    <Left />
+                    <div
+                        style={{
+                            flex: "1 1 300px",
+                            minWidth: 0,
+                            minHeight: isEdit ? "60px" : undefined,
+                        }}
+                    >
+                        <Left />
+                    </div>
+                    <div
+                        style={{
+                            flex: "1 1 300px",
+                            minWidth: 0,
+                            minHeight: isEdit ? "60px" : undefined,
+                        }}
+                    >
+                        <Right />
+                    </div>
                 </div>
-                <div
-                    style={{
-                        flex: "1 1 300px",
-                        minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
-                    }}
-                >
-                    <Right />
+
+                {/* Full-width footer row */}
+                <div style={{ minHeight: isEdit ? "60px" : undefined }}>
+                    <Footer />
                 </div>
             </div>
         );

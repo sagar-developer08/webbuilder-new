@@ -4,6 +4,21 @@ import type { Config } from "@puckeditor/core";
 import { SectionBlock } from "../blocks/SectionBlock";
 import { ContainerBlock } from "../blocks/ContainerBlock";
 import { TwoColumnBlock } from "../blocks/TwoColumnBlock";
+import { ThreeColumnBlock } from "../blocks/ThreeColumnBlock";
+import { TwoRowBlock } from "../blocks/TwoRowBlock";
+import { ThreeRowBlock } from "../blocks/ThreeRowBlock";
+import { Header2ColBlock } from "../blocks/Header2ColBlock";
+import { TwoColFooterBlock } from "../blocks/TwoColFooterBlock";
+import { Sidebar2RowBlock } from "../blocks/Sidebar2RowBlock";
+import { Grid2x2Block } from "../blocks/Grid2x2Block";
+import { Layout1Block } from "../blocks/Layout1Block";
+import { Layout2Block } from "../blocks/Layout2Block";
+import { Layout3Block } from "../blocks/Layout3Block";
+import { Layout4Block } from "../blocks/Layout4Block";
+import { Layout5Block } from "../blocks/Layout5Block";
+import { Layout6Block } from "../blocks/Layout6Block";
+import { Layout7Block } from "../blocks/Layout7Block";
+import { Layout8Block } from "../blocks/Layout8Block";
 
 // Text blocks
 import { Heading1Block } from "../blocks/Heading1Block";
@@ -58,6 +73,21 @@ export const config: Config = {
     Section: SectionBlock,
     Container: ContainerBlock,
     TwoColumn: TwoColumnBlock,
+    ThreeColumn: ThreeColumnBlock,
+    TwoRow: TwoRowBlock,
+    ThreeRow: ThreeRowBlock,
+    Header2Col: Header2ColBlock,
+    TwoColFooter: TwoColFooterBlock,
+    Sidebar2Row: Sidebar2RowBlock,
+    Grid2x2: Grid2x2Block,
+    Layout1: Layout1Block,
+    Layout2: Layout2Block,
+    Layout3: Layout3Block,
+    Layout4: Layout4Block,
+    Layout5: Layout5Block,
+    Layout6: Layout6Block,
+    Layout7: Layout7Block,
+    Layout8: Layout8Block,
 
     // Text
     Heading1: Heading1Block,
@@ -108,7 +138,13 @@ export const config: Config = {
   },
   categories: {
     Layout: {
-      components: ["Section", "Container", "TwoColumn"],
+      components: [
+        "Section", "Container", "TwoColumn", "ThreeColumn",
+        "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
+        "Sidebar2Row", "Grid2x2",
+        "Layout1", "Layout2", "Layout3", "Layout4",
+        "Layout5", "Layout6", "Layout7", "Layout8",
+      ],
     },
     Text: {
       components: ["Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6", "Paragraph", "Span"],

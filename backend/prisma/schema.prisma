@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  pages Page[]
+}
+
+model Page {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title        String
+  previewImage String?  @db.Text
+  favicon      String?  @db.Text
+  visible      Boolean  @default(false)
+
+  // Main content (home page JSON structure)
+  content      String?  @db.Text
+
+  // Additional pages structure (JSON array of { id, slug, title, content })
+  pages        Json?
+
+  subdomain    String   @unique
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

@@ -1,5 +1,3 @@
-import "./blocks-responsive.css";
-
 const ALLOWED_CHILDREN = [
     "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
     "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
@@ -7,40 +5,38 @@ const ALLOWED_CHILDREN = [
     "Checkbox", "Radio", "SubmitButton", "OrderedList", "UnorderedList",
     "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer",
     "Table", "Accordion", "Tabs", "Card", "Container",
-    "ThreeColumn", "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
-    "Sidebar2Row", "Grid2x2", "Layout1", "Layout2", "Layout3",
-    "Layout4", "Layout5", "Layout6", "Layout7", "Layout8",
 ];
 
-export const TwoColumnBlock = {
+/**
+ * Layout 7: Asymmetric — 1/3 left + 2/3 right
+ */
+export const Layout7Block = {
     fields: {
         gap: { type: "text" },
-        // Slot fields for left and right columns
-        left: {
+        narrow: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
-        right: {
+        wide: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
     },
 
     defaultProps: {
-        gap: "40px",
+        gap: "20px",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, left: Left, right: Right } = props;
+        const { editMode: isEdit, gap, narrow: Narrow, wide: Wide } = props;
 
         return (
             <div
-                className="pb-two-col"
                 style={{
                     display: "flex",
                     flexWrap: "wrap",
                     gap,
-                    border: isEdit ? "2px dashed #f59e0b" : "none",
+                    border: isEdit ? "2px dashed #6366f1" : "none",
                     padding: isEdit ? "20px" : undefined,
                     position: "relative",
                 }}
@@ -51,36 +47,38 @@ export const TwoColumnBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#f59e0b",
+                            background: "#6366f1",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
                             borderRadius: "4px",
                         }}
                     >
-                        Two Column
+                        Layout 7
                     </span>
                 )}
 
+                {/* Narrow 1/3 column */}
                 <div
-                    className="pb-col"
                     style={{
-                        flex: "1 1 300px",
+                        flex: "1 1 200px",
+                        maxWidth: "33.333%",
                         minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
+                        minHeight: isEdit ? "80px" : undefined,
                     }}
                 >
-                    <Left />
+                    <Narrow />
                 </div>
+
+                {/* Wide 2/3 column */}
                 <div
-                    className="pb-col"
                     style={{
-                        flex: "1 1 300px",
+                        flex: "2 1 400px",
                         minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
+                        minHeight: isEdit ? "80px" : undefined,
                     }}
                 >
-                    <Right />
+                    <Wide />
                 </div>
             </div>
         );

@@ -7,40 +7,43 @@ const ALLOWED_CHILDREN = [
     "Checkbox", "Radio", "SubmitButton", "OrderedList", "UnorderedList",
     "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer",
     "Table", "Accordion", "Tabs", "Card", "Container",
-    "ThreeColumn", "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
-    "Sidebar2Row", "Grid2x2", "Layout1", "Layout2", "Layout3",
-    "Layout4", "Layout5", "Layout6", "Layout7", "Layout8",
 ];
 
-export const TwoColumnBlock = {
+/**
+ * Layout 2: Sidebar left + main content right
+ */
+export const Layout2Block = {
     fields: {
         gap: { type: "text" },
-        // Slot fields for left and right columns
-        left: {
+        sidebarWidth: { type: "text" },
+        sidebarHeight: { type: "text" },
+        sidebar: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
-        right: {
+        main: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
     },
 
     defaultProps: {
-        gap: "40px",
+        gap: "20px",
+        sidebarWidth: "280px",
+        sidebarHeight: "100vh",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, left: Left, right: Right } = props;
+        const { editMode: isEdit, gap, sidebarWidth, sidebarHeight, sidebar: Sidebar, main: Main } = props;
 
         return (
             <div
-                className="pb-two-col"
+                className="pb-layout2"
                 style={{
                     display: "flex",
                     flexWrap: "wrap",
                     gap,
-                    border: isEdit ? "2px dashed #f59e0b" : "none",
+                    border: isEdit ? "2px dashed #6366f1" : "none",
                     padding: isEdit ? "20px" : undefined,
                     position: "relative",
                 }}
@@ -51,36 +54,39 @@ export const TwoColumnBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#f59e0b",
+                            background: "#6366f1",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
                             borderRadius: "4px",
                         }}
                     >
-                        Two Column
+                        Layout 2
                     </span>
                 )}
 
+                {/* Sidebar left */}
                 <div
-                    className="pb-col"
+                    className="pb-sidebar"
                     style={{
-                        flex: "1 1 300px",
-                        minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
+                        flex: `0 0 ${sidebarWidth}`,
+                        height: sidebarHeight,
+                        minHeight: isEdit ? "120px" : undefined,
                     }}
                 >
-                    <Left />
+                    <Sidebar />
                 </div>
+
+                {/* Main content right */}
                 <div
                     className="pb-col"
                     style={{
-                        flex: "1 1 300px",
+                        flex: "1 1 0%",
                         minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
+                        minHeight: isEdit ? "120px" : undefined,
                     }}
                 >
-                    <Right />
+                    <Main />
                 </div>
             </div>
         );

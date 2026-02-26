@@ -1,5 +1,3 @@
-import "./blocks-responsive.css";
-
 const ALLOWED_CHILDREN = [
     "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
     "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
@@ -7,16 +5,16 @@ const ALLOWED_CHILDREN = [
     "Checkbox", "Radio", "SubmitButton", "OrderedList", "UnorderedList",
     "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer",
     "Table", "Accordion", "Tabs", "Card", "Container",
-    "ThreeColumn", "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
-    "Sidebar2Row", "Grid2x2", "Layout1", "Layout2", "Layout3",
-    "Layout4", "Layout5", "Layout6", "Layout7", "Layout8",
 ];
 
-export const TwoColumnBlock = {
+export const ThreeColumnBlock = {
     fields: {
         gap: { type: "text" },
-        // Slot fields for left and right columns
         left: {
+            type: "slot",
+            allow: ALLOWED_CHILDREN,
+        },
+        center: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
@@ -31,16 +29,15 @@ export const TwoColumnBlock = {
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, left: Left, right: Right } = props;
+        const { editMode: isEdit, gap, left: Left, center: Center, right: Right } = props;
 
         return (
             <div
-                className="pb-two-col"
                 style={{
                     display: "flex",
                     flexWrap: "wrap",
                     gap,
-                    border: isEdit ? "2px dashed #f59e0b" : "none",
+                    border: isEdit ? "2px dashed #8b5cf6" : "none",
                     padding: isEdit ? "20px" : undefined,
                     position: "relative",
                 }}
@@ -51,21 +48,20 @@ export const TwoColumnBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#f59e0b",
+                            background: "#8b5cf6",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
                             borderRadius: "4px",
                         }}
                     >
-                        Two Column
+                        Three Column
                     </span>
                 )}
 
                 <div
-                    className="pb-col"
                     style={{
-                        flex: "1 1 300px",
+                        flex: "1 1 200px",
                         minWidth: 0,
                         minHeight: isEdit ? "60px" : undefined,
                     }}
@@ -73,9 +69,17 @@ export const TwoColumnBlock = {
                     <Left />
                 </div>
                 <div
-                    className="pb-col"
                     style={{
-                        flex: "1 1 300px",
+                        flex: "1 1 200px",
+                        minWidth: 0,
+                        minHeight: isEdit ? "60px" : undefined,
+                    }}
+                >
+                    <Center />
+                </div>
+                <div
+                    style={{
+                        flex: "1 1 200px",
                         minWidth: 0,
                         minHeight: isEdit ? "60px" : undefined,
                     }}

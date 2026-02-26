@@ -1,5 +1,3 @@
-import "./blocks-responsive.css";
-
 const ALLOWED_CHILDREN = [
     "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
     "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
@@ -7,40 +5,51 @@ const ALLOWED_CHILDREN = [
     "Checkbox", "Radio", "SubmitButton", "OrderedList", "UnorderedList",
     "ListItem", "Blockquote", "Code", "Divider", "Badge", "Spacer",
     "Table", "Accordion", "Tabs", "Card", "Container",
-    "ThreeColumn", "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
-    "Sidebar2Row", "Grid2x2", "Layout1", "Layout2", "Layout3",
-    "Layout4", "Layout5", "Layout6", "Layout7", "Layout8",
 ];
 
-export const TwoColumnBlock = {
+export const Sidebar2RowBlock = {
     fields: {
         gap: { type: "text" },
-        // Slot fields for left and right columns
-        left: {
+        sidebarWidth: { type: "text" },
+        sidebarHeight: { type: "text" },
+        sidebar: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
-        right: {
+        top: {
+            type: "slot",
+            allow: ALLOWED_CHILDREN,
+        },
+        bottom: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
     },
 
     defaultProps: {
-        gap: "40px",
+        gap: "20px",
+        sidebarWidth: "250px",
+        sidebarHeight: "100vh",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, left: Left, right: Right } = props;
+        const {
+            editMode: isEdit,
+            gap,
+            sidebarWidth,
+            sidebarHeight,
+            sidebar: Sidebar,
+            top: Top,
+            bottom: Bottom,
+        } = props;
 
         return (
             <div
-                className="pb-two-col"
                 style={{
                     display: "flex",
                     flexWrap: "wrap",
                     gap,
-                    border: isEdit ? "2px dashed #f59e0b" : "none",
+                    border: isEdit ? "2px dashed #a855f7" : "none",
                     padding: isEdit ? "20px" : undefined,
                     position: "relative",
                 }}
@@ -51,36 +60,44 @@ export const TwoColumnBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#f59e0b",
+                            background: "#a855f7",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
                             borderRadius: "4px",
                         }}
                     >
-                        Two Column
+                        Sidebar + 2 Row
                     </span>
                 )}
 
+                {/* Narrow sidebar on the left */}
                 <div
-                    className="pb-col"
                     style={{
-                        flex: "1 1 300px",
-                        minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
+                        flex: `0 0 ${sidebarWidth}`,
+                        height: sidebarHeight,
+                        minHeight: isEdit ? "120px" : undefined,
                     }}
                 >
-                    <Left />
+                    <Sidebar />
                 </div>
+
+                {/* Two stacked rows on the right */}
                 <div
-                    className="pb-col"
                     style={{
-                        flex: "1 1 300px",
+                        flex: "1 1 0%",
                         minWidth: 0,
-                        minHeight: isEdit ? "60px" : undefined,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap,
                     }}
                 >
-                    <Right />
+                    <div style={{ minHeight: isEdit ? "60px" : undefined }}>
+                        <Top />
+                    </div>
+                    <div style={{ minHeight: isEdit ? "60px" : undefined }}>
+                        <Bottom />
+                    </div>
                 </div>
             </div>
         );

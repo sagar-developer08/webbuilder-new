@@ -4,6 +4,10 @@ export const BlockquoteBlock = {
         borderColor: { type: "text" },
         color: { type: "text" },
         fontSize: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        backgroundColor: { type: "text" },
     },
 
     defaultProps: {
@@ -11,6 +15,10 @@ export const BlockquoteBlock = {
         borderColor: "#2563eb",
         color: "#4b5563",
         fontSize: "18px",
+        padding: "12px 20px",
+        margin: "0px",
+        borderRadius: "0 8px 8px 0",
+        backgroundColor: "#f8fafc",
     },
 
     render: (props: any) => {
@@ -18,13 +26,13 @@ export const BlockquoteBlock = {
             <blockquote
                 style={{
                     borderLeft: `4px solid ${props.borderColor}`,
-                    padding: "12px 20px",
-                    margin: "16px 0",
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     color: props.color,
                     fontSize: props.fontSize,
                     fontStyle: "italic",
-                    backgroundColor: "#f8fafc",
-                    borderRadius: "0 8px 8px 0",
+                    backgroundColor: props.backgroundColor ?? "#f8fafc",
+                    borderRadius: props.borderRadius ?? "0 8px 8px 0",
                     lineHeight: "1.6",
                 }}
             >

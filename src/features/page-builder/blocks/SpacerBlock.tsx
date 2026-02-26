@@ -1,10 +1,14 @@
 export const SpacerBlock = {
     fields: {
         height: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
     },
 
     defaultProps: {
         height: "40px",
+        padding: "0px",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -12,6 +16,8 @@ export const SpacerBlock = {
             <div
                 style={{
                     height: props.height,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     width: "100%",
                 }}
             />

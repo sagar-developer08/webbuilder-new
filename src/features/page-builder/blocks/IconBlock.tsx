@@ -3,14 +3,18 @@ export const IconBlock = {
         iconName: { type: "text" },
         size: { type: "text" },
         color: { type: "text" },
+        padding: { type: "text" },
         href: { type: "text" },
+        margin: { type: "text" },
     },
 
     defaultProps: {
         iconName: "Star",
         size: "24px",
         color: "#000000",
+        padding: "0px",
         href: "",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -21,6 +25,8 @@ export const IconBlock = {
                 style={{
                     fontSize: props.size,
                     color: props.color,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",

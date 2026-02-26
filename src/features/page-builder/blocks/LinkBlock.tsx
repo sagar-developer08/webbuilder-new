@@ -4,6 +4,7 @@ export const LinkBlock = {
         href: { type: "text" },
         color: { type: "text" },
         fontSize: { type: "text" },
+        padding: { type: "text" },
         underline: {
             type: "select",
             options: [
@@ -11,6 +12,7 @@ export const LinkBlock = {
                 { label: "No", value: "none" },
             ],
         },
+        margin: { type: "text" },
     },
 
     defaultProps: {
@@ -18,7 +20,9 @@ export const LinkBlock = {
         href: "#",
         color: "#2563eb",
         fontSize: "16px",
+        padding: "0px",
         underline: "underline",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -36,6 +40,8 @@ export const LinkBlock = {
                 style={{
                     color: props.color,
                     fontSize: props.fontSize,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     textDecoration: props.underline,
                     cursor: "pointer",
                 }}

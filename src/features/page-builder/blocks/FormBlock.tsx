@@ -6,11 +6,15 @@ export const FormBlock = {
             type: "slot",
             allow: ["Input", "Textarea", "Select", "Checkbox", "Radio", "SubmitButton", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6", "Paragraph", "Span", "Spacer", "Divider"],
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
     },
 
     defaultProps: {
         backgroundColor: "#ffffff",
         padding: "24px",
+        margin: "0px",
+        borderRadius: "8px",
     },
 
     render: (props: any) => {
@@ -22,8 +26,9 @@ export const FormBlock = {
                 style={{
                     backgroundColor,
                     padding,
-                    borderRadius: "8px",
+                    borderRadius: props.borderRadius ?? "8px",
                     border: "1px solid #e2e8f0",
+                    margin: props.margin ?? "0px",
                 }}
             >
                 <Children />

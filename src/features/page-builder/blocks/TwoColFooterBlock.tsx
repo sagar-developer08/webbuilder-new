@@ -10,6 +10,7 @@ const ALLOWED_CHILDREN = [
 export const TwoColFooterBlock = {
     fields: {
         gap: { type: "text" },
+        padding: { type: "text" },
         left: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -22,14 +23,21 @@ export const TwoColFooterBlock = {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        background: { type: "text" },
     },
 
     defaultProps: {
         gap: "20px",
+        padding: "0px",
+        margin: "0px",
+        borderRadius: "4px",
+        background: "#f97316",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, left: Left, right: Right, footer: Footer } = props;
+        const { editMode: isEdit, gap, padding, left: Left, right: Right, footer: Footer } = props;
 
         return (
             <div
@@ -38,7 +46,8 @@ export const TwoColFooterBlock = {
                     flexDirection: "column",
                     gap,
                     border: isEdit ? "2px dashed #f97316" : "none",
-                    padding: isEdit ? "20px" : undefined,
+                    padding: padding || (isEdit ? "20px" : undefined),
+                    margin: props.margin ?? "0px",
                     position: "relative",
                 }}
             >
@@ -48,11 +57,11 @@ export const TwoColFooterBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#f97316",
+                            background: props.background ?? "#f97316",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
-                            borderRadius: "4px",
+                            borderRadius: props.borderRadius ?? "4px",
                         }}
                     >
                         2 Col + Footer

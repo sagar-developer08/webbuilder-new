@@ -4,7 +4,10 @@ export const CardBlock = {
         cardBody: { type: "textarea" },
         cardImageUrl: { type: "text" },
         backgroundColor: { type: "text" },
+        padding: { type: "text" },
         borderRadius: { type: "text" },
+        margin: { type: "text" },
+        boxShadow: { type: "text" },
     },
 
     defaultProps: {
@@ -12,7 +15,10 @@ export const CardBlock = {
         cardBody: "Card body text. Describe something interesting here.",
         cardImageUrl: "",
         backgroundColor: "#ffffff",
+        padding: "20px",
         borderRadius: "12px",
+        margin: "0px",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
     },
 
     render: (props: any) => {
@@ -23,7 +29,8 @@ export const CardBlock = {
                     borderRadius: props.borderRadius,
                     border: "1px solid #e2e8f0",
                     overflow: "hidden",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                    boxShadow: props.boxShadow ?? "0 1px 3px rgba(0,0,0,0.08)",
+                    margin: props.margin ?? "0px",
                 }}
             >
                 {props.cardImageUrl && (
@@ -39,7 +46,7 @@ export const CardBlock = {
                         />
                     </div>
                 )}
-                <div style={{ padding: "20px" }}>
+                <div style={{ padding: props.padding }}>
                     <h3
                         style={{
                             fontSize: "18px",

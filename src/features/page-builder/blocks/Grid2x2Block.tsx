@@ -12,6 +12,7 @@ const ALLOWED_CHILDREN = [
 export const Grid2x2Block = {
     fields: {
         gap: { type: "text" },
+        padding: { type: "text" },
         topLeft: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -28,16 +29,24 @@ export const Grid2x2Block = {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        background: { type: "text" },
     },
 
     defaultProps: {
         gap: "20px",
+        padding: "0px",
+        margin: "0px",
+        borderRadius: "4px",
+        background: "#ef4444",
     },
 
     render: (props: any) => {
         const {
             editMode: isEdit,
             gap,
+            padding,
             topLeft: TopLeft,
             topRight: TopRight,
             bottomLeft: BottomLeft,
@@ -53,7 +62,8 @@ export const Grid2x2Block = {
                     gridTemplateRows: "auto auto",
                     gap,
                     border: isEdit ? "2px dashed #ef4444" : "none",
-                    padding: isEdit ? "20px" : undefined,
+                    padding: padding || (isEdit ? "20px" : undefined),
+                    margin: props.margin ?? "0px",
                     position: "relative",
                 }}
             >
@@ -63,11 +73,11 @@ export const Grid2x2Block = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#ef4444",
+                            background: props.background ?? "#ef4444",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
-                            borderRadius: "4px",
+                            borderRadius: props.borderRadius ?? "4px",
                             zIndex: 1,
                         }}
                     >

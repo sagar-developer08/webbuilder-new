@@ -11,13 +11,15 @@ export const DividerBlock = {
             ],
         },
         margin: { type: "text" },
+        padding: { type: "text" },
     },
 
     defaultProps: {
         color: "#e2e8f0",
         thickness: "1px",
         style: "solid",
-        margin: "24px 0",
+        margin: "0px",
+        padding: "0px",
     },
 
     render: (props: any) => {
@@ -26,7 +28,8 @@ export const DividerBlock = {
                 style={{
                     border: "none",
                     borderTop: `${props.thickness} ${props.style} ${props.color}`,
-                    margin: props.margin,
+                    margin: props.margin ?? "0px",
+                    padding: props.padding,
                 }}
             />
         );

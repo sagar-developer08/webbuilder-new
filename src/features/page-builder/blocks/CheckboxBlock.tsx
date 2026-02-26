@@ -1,6 +1,7 @@
 export const CheckboxBlock = {
     fields: {
         innerText: { type: "text" },
+        padding: { type: "text" },
         checked: {
             type: "select",
             options: [
@@ -8,11 +9,14 @@ export const CheckboxBlock = {
                 { label: "Checked", value: "true" },
             ],
         },
+        margin: { type: "text" },
     },
 
     defaultProps: {
         innerText: "Checkbox",
+        padding: "0px",
         checked: "false",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -25,6 +29,8 @@ export const CheckboxBlock = {
                     fontSize: "14px",
                     color: "#374151",
                     cursor: "pointer",
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     marginBottom: "8px",
                 }}
             >

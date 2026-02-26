@@ -10,6 +10,7 @@ const ALLOWED_CHILDREN = [
 export const Header2ColBlock = {
     fields: {
         gap: { type: "text" },
+        padding: { type: "text" },
         header: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -22,14 +23,21 @@ export const Header2ColBlock = {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        background: { type: "text" },
     },
 
     defaultProps: {
         gap: "20px",
+        padding: "0px",
+        margin: "0px",
+        borderRadius: "4px",
+        background: "#ec4899",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, header: Header, left: Left, right: Right } = props;
+        const { editMode: isEdit, gap, padding, header: Header, left: Left, right: Right } = props;
 
         return (
             <div
@@ -38,7 +46,8 @@ export const Header2ColBlock = {
                     flexDirection: "column",
                     gap,
                     border: isEdit ? "2px dashed #ec4899" : "none",
-                    padding: isEdit ? "20px" : undefined,
+                    padding: padding || (isEdit ? "20px" : undefined),
+                    margin: props.margin ?? "0px",
                     position: "relative",
                 }}
             >
@@ -48,11 +57,11 @@ export const Header2ColBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#ec4899",
+                            background: props.background ?? "#ec4899",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
-                            borderRadius: "4px",
+                            borderRadius: props.borderRadius ?? "4px",
                         }}
                     >
                         Header + 2 Col

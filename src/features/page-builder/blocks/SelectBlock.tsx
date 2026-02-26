@@ -3,12 +3,20 @@ export const SelectBlock = {
         options: { type: "textarea" },
         placeholder: { type: "text" },
         label: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        backgroundColor: { type: "text" },
     },
 
     defaultProps: {
         options: "Option 1\nOption 2\nOption 3",
         placeholder: "Select...",
         label: "",
+        padding: "0px",
+        margin: "0px",
+        borderRadius: "6px",
+        backgroundColor: "#ffffff",
     },
 
     render: (props: any) => {
@@ -18,7 +26,7 @@ export const SelectBlock = {
             .filter((o: string) => o.length > 0);
 
         return (
-            <div style={{ marginBottom: "16px" }}>
+            <div style={{ marginBottom: "16px", padding: props.padding }}>
                 {props.label && (
                     <label
                         style={{
@@ -33,14 +41,16 @@ export const SelectBlock = {
                     </label>
                 )}
                 <select
+                    aria-label={props.label || props.placeholder || "Select"}
                     style={{
                         width: "100%",
                         padding: "10px 12px",
+                        margin: props.margin,
                         fontSize: "14px",
                         border: "1px solid #d1d5db",
-                        borderRadius: "6px",
+                        borderRadius: props.borderRadius ?? "6px",
                         outline: "none",
-                        backgroundColor: "#ffffff",
+                        backgroundColor: props.backgroundColor ?? "#ffffff",
                         boxSizing: "border-box",
                     }}
                     defaultValue=""

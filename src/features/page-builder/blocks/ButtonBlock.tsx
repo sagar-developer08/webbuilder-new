@@ -5,6 +5,7 @@ export const ButtonBlock = {
         backgroundColor: { type: "text" },
         color: { type: "text" },
         padding: { type: "text" },
+        margin: { type: "text" },
     },
 
     defaultProps: {
@@ -13,6 +14,7 @@ export const ButtonBlock = {
         backgroundColor: "#007bff",
         color: "#ffffff",
         padding: "12px 24px",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -23,6 +25,7 @@ export const ButtonBlock = {
                         backgroundColor: props.backgroundColor,
                         color: props.color,
                         padding: props.padding,
+                        margin: props.margin ?? "0px",
                         border: "none",
                         cursor: "pointer",
                     }}

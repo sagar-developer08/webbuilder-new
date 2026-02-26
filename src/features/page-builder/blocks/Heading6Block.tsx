@@ -2,6 +2,7 @@ export const Heading6Block = {
     fields: {
         text: { type: "text" },
         color: { type: "text" },
+        padding: { type: "text" },
         textAlign: {
             type: "select",
             options: [
@@ -10,12 +11,15 @@ export const Heading6Block = {
                 { label: "Right", value: "right" },
             ],
         },
+        margin: { type: "text" },
     },
 
     defaultProps: {
         text: "Heading 6",
         color: "#000000",
+        padding: "0px",
         textAlign: "left",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -25,8 +29,9 @@ export const Heading6Block = {
                     fontSize: "1rem",
                     fontWeight: 600,
                     color: props.color,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     textAlign: props.textAlign,
-                    margin: "0.5em 0",
                 }}
             >
                 {props.text}

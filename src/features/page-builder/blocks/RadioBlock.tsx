@@ -3,12 +3,16 @@ export const RadioBlock = {
         innerText: { type: "text" },
         name: { type: "text" },
         value: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
     },
 
     defaultProps: {
         innerText: "Radio",
         name: "radio-group",
         value: "option1",
+        padding: "0px",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -21,6 +25,8 @@ export const RadioBlock = {
                     fontSize: "14px",
                     color: "#374151",
                     cursor: "pointer",
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     marginBottom: "8px",
                 }}
             >

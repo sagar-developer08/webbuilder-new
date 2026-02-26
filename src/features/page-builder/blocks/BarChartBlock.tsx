@@ -22,6 +22,11 @@ export const BarChartBlock = {
         dataset2Data: { type: "textarea" },
         dataset2Color: { type: "text" },
         height: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        boxShadow: { type: "text" },
+        background: { type: "text" },
     },
 
     defaultProps: {
@@ -34,6 +39,11 @@ export const BarChartBlock = {
         dataset2Data: "50,55,42,60,48,75,52,58,68,62",
         dataset2Color: "#f59e0b",
         height: "300px",
+        padding: "20px",
+        margin: "0px",
+        borderRadius: "12px",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+        background: "#fff",
     },
 
     render: (props: any) => {
@@ -84,10 +94,11 @@ export const BarChartBlock = {
             <div
                 className="pb-chart"
                 style={{
-                    background: "#fff",
-                    borderRadius: "12px",
-                    padding: "20px",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                    background: props.background ?? "#fff",
+                    borderRadius: props.borderRadius ?? "12px",
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
+                    boxShadow: props.boxShadow ?? "0 1px 3px rgba(0,0,0,0.08)",
                     height: props.height,
                 }}
             >

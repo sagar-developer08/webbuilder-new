@@ -3,12 +3,16 @@ export const OrderedListBlock = {
         listItems: { type: "textarea" },
         fontSize: { type: "text" },
         color: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
     },
 
     defaultProps: {
         listItems: "Step 1\nStep 2\nStep 3",
         fontSize: "16px",
         color: "#374151",
+        padding: "0px",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -22,6 +26,8 @@ export const OrderedListBlock = {
                 style={{
                     fontSize: props.fontSize,
                     color: props.color,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     paddingLeft: "24px",
                     listStyleType: "decimal",
                     lineHeight: "1.8",

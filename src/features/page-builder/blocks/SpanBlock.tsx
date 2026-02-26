@@ -3,6 +3,7 @@ export const SpanBlock = {
         text: { type: "text" },
         fontSize: { type: "text" },
         color: { type: "text" },
+        padding: { type: "text" },
         fontWeight: {
             type: "select",
             options: [
@@ -12,14 +13,19 @@ export const SpanBlock = {
             ],
         },
         backgroundColor: { type: "text" },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
     },
 
     defaultProps: {
         text: "Span text",
         fontSize: "16px",
         color: "#000000",
+        padding: "0px",
         fontWeight: "400",
         backgroundColor: "transparent",
+        margin: "0px",
+        borderRadius: undefined,
     },
 
     render: (props: any) => {
@@ -30,8 +36,9 @@ export const SpanBlock = {
                     color: props.color,
                     fontWeight: props.fontWeight,
                     backgroundColor: props.backgroundColor,
-                    padding: props.backgroundColor !== "transparent" ? "2px 6px" : undefined,
-                    borderRadius: props.backgroundColor !== "transparent" ? "4px" : undefined,
+                    padding: props.padding || (props.backgroundColor !== "transparent" ? "2px 6px" : undefined),
+                    margin: props.margin ?? "0px",
+                    borderRadius: props.borderRadius ?? (props.backgroundColor !== "transparent" ? "4px" : undefined),
                 }}
             >
                 {props.text}

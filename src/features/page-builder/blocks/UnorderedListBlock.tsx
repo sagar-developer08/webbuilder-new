@@ -3,12 +3,16 @@ export const UnorderedListBlock = {
         listItems: { type: "textarea" },
         fontSize: { type: "text" },
         color: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
     },
 
     defaultProps: {
         listItems: "Item 1\nItem 2\nItem 3",
         fontSize: "16px",
         color: "#374151",
+        padding: "0px",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -22,6 +26,8 @@ export const UnorderedListBlock = {
                 style={{
                     fontSize: props.fontSize,
                     color: props.color,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     paddingLeft: "24px",
                     listStyleType: "disc",
                     lineHeight: "1.8",

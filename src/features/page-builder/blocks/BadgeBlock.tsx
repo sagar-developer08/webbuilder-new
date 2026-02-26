@@ -4,7 +4,9 @@ export const BadgeBlock = {
         backgroundColor: { type: "text" },
         color: { type: "text" },
         fontSize: { type: "text" },
+        padding: { type: "text" },
         borderRadius: { type: "text" },
+        margin: { type: "text" },
     },
 
     defaultProps: {
@@ -12,7 +14,9 @@ export const BadgeBlock = {
         backgroundColor: "#2563eb",
         color: "#ffffff",
         fontSize: "12px",
+        padding: "4px 12px",
         borderRadius: "999px",
+        margin: "0px",
     },
 
     render: (props: any) => {
@@ -24,7 +28,8 @@ export const BadgeBlock = {
                     color: props.color,
                     fontSize: props.fontSize,
                     fontWeight: 600,
-                    padding: "4px 12px",
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     borderRadius: props.borderRadius,
                     letterSpacing: "0.025em",
                     textTransform: "uppercase",

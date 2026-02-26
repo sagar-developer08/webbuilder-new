@@ -10,6 +10,7 @@ const ALLOWED_CHILDREN = [
 export const ThreeRowBlock = {
     fields: {
         gap: { type: "text" },
+        padding: { type: "text" },
         top: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -22,14 +23,21 @@ export const ThreeRowBlock = {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        background: { type: "text" },
     },
 
     defaultProps: {
         gap: "20px",
+        padding: "0px",
+        margin: "0px",
+        borderRadius: "4px",
+        background: "#14b8a6",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, top: Top, middle: Middle, bottom: Bottom } = props;
+        const { editMode: isEdit, gap, padding, top: Top, middle: Middle, bottom: Bottom } = props;
 
         return (
             <div
@@ -38,7 +46,8 @@ export const ThreeRowBlock = {
                     flexDirection: "column",
                     gap,
                     border: isEdit ? "2px dashed #14b8a6" : "none",
-                    padding: isEdit ? "20px" : undefined,
+                    padding: padding || (isEdit ? "20px" : undefined),
+                    margin: props.margin ?? "0px",
                     position: "relative",
                 }}
             >
@@ -48,11 +57,11 @@ export const ThreeRowBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#14b8a6",
+                            background: props.background ?? "#14b8a6",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
-                            borderRadius: "4px",
+                            borderRadius: props.borderRadius ?? "4px",
                         }}
                     >
                         Three Row

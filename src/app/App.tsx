@@ -21,7 +21,13 @@ function App() {
     console.log("Navigating to:", pageId);
 
     if (pageId === "root" || !pageId) {
-      if (rootData) setPageData(rootData);
+      console.log("Navigating to root, using rootData:", rootData);
+      if (rootData) {
+        setPageData(rootData);
+      } else {
+        // Fallback if rootData is somehow missing
+        console.warn("No root data found, staying on current page or might be broken.");
+      }
       return;
     }
 
@@ -179,10 +185,22 @@ function App() {
       <PageEditor
         initialData={pageData}
         onPublish={(data, pages, rootContent) => {
+          // If we are editing a subpage, 'data' is the subpage content.
+          // If we are editing root, 'data' is root content.
+          // rootContent argument comes from PuckEditor which knows the full state.
+
           setPageData(data); // Start preview with what we were just editing
           if (pages) setAllPages(pages);
-          // If rootContent provided, use it. If not provided (single page edit), assume data is root.
-          setRootData(rootContent || data);
+
+          // CRITICAL: Ensure rootData is set correctly. 
+          // If rootContent is passed (always now), use it.
+          if (rootContent) {
+            setRootData(rootContent);
+          } else {
+            // Fallback: If no rootContent passed, assume current data is root (single page mode)
+            setRootData(data);
+          }
+
           setMode("view");
         }}
       />

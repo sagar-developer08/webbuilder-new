@@ -34,15 +34,23 @@ export const PageLink: ComponentConfig<PageLinkProps> = {
         const preview = usePreview();
 
         const handleClick = (e: React.MouseEvent) => {
-            if (preview && pageId) {
+            let pid = pageId;
+            // Catch variations like "Home", "index"
+            if (pid === 'Home' || pid === 'index') pid = 'root';
+
+            if (preview && pid) {
                 e.preventDefault();
-                preview.navigateToPage(pageId);
+                preview.navigateToPage(pid);
             }
         };
 
+        // Handle root path specifically (avoid /root)
+        let targetPath = pageId;
+        if (targetPath === 'root' || targetPath === 'Home' || targetPath === 'index') targetPath = '';
+
         // In live site, rely on href. In preview, intercept.
         // Ensure href is safe if pageId is missing
-        const href = pageId ? (preview ? '#' : `/${pageId}`) : '#';
+        const href = pageId ? (preview ? '#' : `/${targetPath}`) : '#';
 
         return (
             <a

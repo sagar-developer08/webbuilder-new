@@ -51,12 +51,12 @@ export default function PageEditor({ onPublish, initialData }: Props) {
   const [activePageId, setActivePageId] = useState<string>("root"); // "root" or sub-page ID
 
   // Editor data state
-  const [rootContent, setRootContent] = useState<Data>(initialData ?? { content: [] });
+  const [rootContent, setRootContent] = useState<Data>(initialData ?? { content: [], root: {} });
   // We need to keep sync of what is currently in Puck vs what is in our state to switch pages without losing data
   // Puck controls its own state, but we can feed it via `data` prop.
   // However, `data` prop only sets INITIAL data. To update it, we need to force re-render (key change).
   const [puckKey, setPuckKey] = useState<string>("initial-root");
-  const [currentPuckData, setCurrentPuckData] = useState<Data>(initialData ?? { content: [] });
+  const [currentPuckData, setCurrentPuckData] = useState<Data>(initialData ?? { content: [], root: {} });
 
   // Dynamic config for PageLink
   const [editorConfig, setEditorConfig] = useState(puckConfig);
@@ -80,6 +80,24 @@ export default function PageEditor({ onPublish, initialData }: Props) {
             pageId: {
               type: "select" as const,
               options: pageOptions
+            }
+          }
+        },
+        Navbar: {
+          ...puckConfig.components.Navbar, // Ensure Navbar is in config
+          fields: {
+            ...puckConfig.components.Navbar?.fields,
+            links: {
+              ...puckConfig.components.Navbar?.fields.links,
+              type: "array", // TypeScript might need this re-asserted if lost
+              arrayFields: {
+                //@ts-ignore - TS might complain about deep access
+                ...puckConfig.components.Navbar?.fields.links.arrayFields,
+                pageId: {
+                  type: "select",
+                  options: pageOptions
+                }
+              }
             }
           }
         }
@@ -108,23 +126,8 @@ export default function PageEditor({ onPublish, initialData }: Props) {
   };
 
   // Helper to switch pages
-  const switchPage = (targetPageId: string, newData?: Data) => {
-    // 1. Save current puck state to relevant storage
-    const dataToSave = newData; // passed from onSave/Publish or we could try to get it?
-    // Wait, we can't easily get data out of Puck unless we track onChange or use onPublish. 
-    // BUT we are outside Puck here. 
-    // The simplified approach: We only switch pages when user explicitly selects a page. 
-    // We should prompt to save if dirty? Or auto-save to local state?
-    // Let's rely on standard "Save" flow to persist to backend, 
-    // but for switching views, we need to capture current state.
-
-    // Limitation: We might lose unsaved changes in current view if we switch without capturing.
-    // For this demo, let's assume the user saves before switching or we accept the risk, 
-    // OR we can try to use a ref or internal state if Puck exposed `onChange`. 
-    // Puck's `onChange` gives us the data.
-
-    // IMPROVEMENT: We will attach an onChange handler to Puck to keep `currentPuckData` updated.
-
+  const switchPage = (targetPageId: string) => {
+    // 1. Save current puck state of previous page
     if (activePageId === "root") {
       setRootContent(currentPuckData);
     } else {
@@ -132,7 +135,7 @@ export default function PageEditor({ onPublish, initialData }: Props) {
     }
 
     // 2. Load new data
-    let nextData: Data = { content: [] };
+    let nextData: Data = { content: [], root: {} };
     if (targetPageId === "root") {
       nextData = rootContent;
     } else {
@@ -159,7 +162,7 @@ export default function PageEditor({ onPublish, initialData }: Props) {
       id: `page-${Date.now()}`,
       title,
       slug,
-      content: '{"content":[]}'
+      content: '{"content":[], "root":{}}'
     };
 
     setPages([...pages, newPage]);
@@ -275,11 +278,11 @@ export default function PageEditor({ onPublish, initialData }: Props) {
 
         // Load Root Content
         try {
-          const content = JSON.parse(site.content || '{"content":[]}');
+          const content = JSON.parse(site.content || '{"content":[], "root":{}}');
           setRootContent(content);
           setCurrentPuckData(content);
         } catch (e) {
-          setRootContent({ content: [] });
+          setRootContent({ content: [], root: {} });
         }
 
         // Load Pages
@@ -324,83 +327,166 @@ export default function PageEditor({ onPublish, initialData }: Props) {
     }
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
   return (
     <div style={{ display: "flex", width: "100%", height: "100vh" }}>
-      {/* Saved Sites Sidebar */}
+      {/* Sidebar (Saved Sites + Pages) */}
       <div style={{
-        width: "250px",
+        width: sidebarOpen ? "250px" : "0",
         background: "#fff",
-        borderRight: "1px solid #e2e8f0",
+        borderRight: sidebarOpen ? "1px solid #e2e8f0" : "none",
         display: "flex",
         flexDirection: "column",
         zIndex: 10,
+        height: "100vh",
+        transition: "width 0.3s ease",
+        overflow: "hidden",
+        position: "relative"
       }}>
-        <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0" }}>
-          <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>Saved Sites</h3>
+        {/* Top Half: Saved Sites */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, borderBottom: "1px solid #e2e8f0", opacity: sidebarOpen ? 1 : 0, transition: "opacity 0.2s" }}>
+          <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0" }}>
+            <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>Saved Sites</h3>
+          </div>
+          <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
+            {sites.map(site => (
+              <div
+                key={site.id}
+                onClick={() => handleLoadSite(site.id)}
+                style={{
+                  padding: "10px",
+                  marginBottom: "8px",
+                  borderRadius: "6px",
+                  background: site.id === currentSiteId ? "#e0f2fe" : "#f8fafc",
+                  border: "1px solid",
+                  borderColor: site.id === currentSiteId ? "#bae6fd" : "#e2e8f0",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}
+              >
+                <div style={{ overflow: "hidden" }}>
+                  <div style={{ fontWeight: 500, fontSize: "14px", marginBottom: "4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {site.title || "Untitled"}
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#64748b" }}>
+                    {site.subdomain}
+                  </div>
+                </div>
+                <button
+                  onClick={(e) => handleDeleteSite(e, site.id)}
+                  style={{
+                    color: "#ef4444",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                    padding: "4px"
+                  }}
+                  title="Delete Site"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            {sites.length === 0 && <div style={{ color: "#94a3b8", fontSize: "13px", padding: "8px" }}>No saved sites</div>}
+
+            <div style={{ marginTop: "auto", paddingTop: "10px", borderTop: "1px solid #eee" }}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (confirm("Create new site? Unsaved changes will be lost.")) {
+                    window.location.reload();
+                  }
+                }}
+                style={{ width: "100%" }}
+              >
+                + Create New Site
+              </Button>
+            </div>
+          </div>
         </div>
-        <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
-          {sites.map(site => (
+
+        {/* Bottom Half: Pages */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
+          <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>Pages</h3>
+            <Button size="sm" variant="outline" onClick={handleCreatePage}>+ New</Button>
+          </div>
+          <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
             <div
-              key={site.id}
-              onClick={() => handleLoadSite(site.id)}
+              onClick={() => switchPage("root")}
               style={{
                 padding: "10px",
                 marginBottom: "8px",
                 borderRadius: "6px",
-                background: site.id === currentSiteId ? "#e0f2fe" : "#f8fafc",
+                background: activePageId === "root" ? "#e0f2fe" : "#f8fafc",
                 border: "1px solid",
-                borderColor: site.id === currentSiteId ? "#bae6fd" : "#e2e8f0",
+                borderColor: activePageId === "root" ? "#bae6fd" : "#e2e8f0",
                 cursor: "pointer",
-                transition: "all 0.2s",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center"
               }}
             >
-              <div style={{ overflow: "hidden" }}>
-                <div style={{ fontWeight: 500, fontSize: "14px", marginBottom: "4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                  {site.title || "Untitled"}
-                </div>
-                <div style={{ fontSize: "12px", color: "#64748b" }}>
-                  {site.subdomain}
-                </div>
-              </div>
-              <button
-                onClick={(e) => handleDeleteSite(e, site.id)}
-                style={{
-                  color: "#ef4444",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  marginLeft: "8px",
-                  padding: "4px"
-                }}
-                title="Delete Site"
-              >
-                ✕
-              </button>
+              <div style={{ fontWeight: 500, fontSize: "14px" }}>Home</div>
             </div>
-          ))}
-          {sites.length === 0 && <div style={{ color: "#94a3b8", fontSize: "13px", padding: "8px" }}>No saved sites</div>}
-
-          <div style={{ marginTop: "auto", paddingTop: "10px", borderTop: "1px solid #eee" }}>
-            <Button
-              variant="outline"
-              onClick={() => {
-                if (confirm("Create new site? Unsaved changes will be lost.")) {
-                  window.location.reload();
-                }
-              }}
-              style={{ width: "100%" }}
-            >
-              + Create New Site
-            </Button>
+            {pages.map(page => (
+              <div
+                key={page.id}
+                onClick={() => switchPage(page.id)}
+                style={{
+                  padding: "10px",
+                  marginBottom: "8px",
+                  borderRadius: "6px",
+                  background: activePageId === page.id ? "#e0f2fe" : "#f8fafc",
+                  border: "1px solid",
+                  borderColor: activePageId === page.id ? "#bae6fd" : "#e2e8f0",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}
+              >
+                <div style={{ fontWeight: 500, fontSize: "14px" }}>{page.title}</div>
+                <div style={{ fontSize: "10px", color: "#64748b" }}>/{page.slug}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Puck Editor */}
       <div style={{ flex: 1, position: "relative" }}>
+
+        {/* Sidebar Toggle Button */}
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{
+            position: "absolute",
+            top: "12px",
+            left: "12px",
+            zIndex: 100, // Above Puck toolbar
+            background: "#f8fafc",
+            border: "1px solid #e2e8f0",
+            borderRadius: "4px",
+            width: "32px", height: "32px",
+            cursor: "pointer",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+            display: "flex", alignItems: "center", justifyContent: "center"
+          }}
+          title={sidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+        >
+          {/* Simple Menu Icon */}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {sidebarOpen ? (
+              <path d="M19 12H5m7-7l-7 7 7 7" />
+            ) : (
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+
         <Puck
           key={puckKey}
           config={editorConfig}
@@ -413,58 +499,6 @@ export default function PageEditor({ onPublish, initialData }: Props) {
             <SaveHeader onSave={handleSave} onPublish={onPublish} pages={pages} rootContent={rootContent} />
           )}
         />
-      </div>
-
-      {/* Pages Sidebar (Right Side) */}
-      <div style={{
-        width: "250px",
-        background: "#fff",
-        borderLeft: "1px solid #e2e8f0",
-        display: "flex",
-        flexDirection: "column",
-        zIndex: 10,
-      }}>
-        <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>Pages</h3>
-          <Button size="sm" variant="outline" onClick={handleCreatePage}>+ New</Button>
-        </div>
-        <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
-          <div
-            onClick={() => switchPage("root")}
-            style={{
-              padding: "10px",
-              marginBottom: "8px",
-              borderRadius: "6px",
-              background: activePageId === "root" ? "#e0f2fe" : "#f8fafc",
-              border: "1px solid",
-              borderColor: activePageId === "root" ? "#bae6fd" : "#e2e8f0",
-              cursor: "pointer",
-            }}
-          >
-            <div style={{ fontWeight: 500, fontSize: "14px" }}>Home</div>
-          </div>
-          {pages.map(page => (
-            <div
-              key={page.id}
-              onClick={() => switchPage(page.id)}
-              style={{
-                padding: "10px",
-                marginBottom: "8px",
-                borderRadius: "6px",
-                background: activePageId === page.id ? "#e0f2fe" : "#f8fafc",
-                border: "1px solid",
-                borderColor: activePageId === page.id ? "#bae6fd" : "#e2e8f0",
-                cursor: "pointer",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
-              <div style={{ fontWeight: 500, fontSize: "14px" }}>{page.title}</div>
-              <div style={{ fontSize: "10px", color: "#64748b" }}>/{page.slug}</div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

@@ -45,6 +45,7 @@ import { EmbedBlock } from "../blocks/EmbedBlock";
 // Link blocks
 import { LinkBlock } from "../blocks/LinkBlock";
 import { PageLink } from "../blocks/PageLink";
+import { NavbarBlock } from "../blocks/NavbarBlock";
 
 // Form blocks
 import { FormBlock } from "../blocks/FormBlock";
@@ -87,6 +88,7 @@ export const config: Config = {
     TwoColFooter: withResize(TwoColFooterBlock),
     Sidebar2Row: withResize(Sidebar2RowBlock),
     Grid2x2: withResize(Grid2x2Block),
+    Navbar: NavbarBlock,
     Layout1: withResize(Layout1Block),
     Layout2: withResize(Layout2Block),
     Layout3: withResize(Layout3Block),
@@ -154,7 +156,7 @@ export const config: Config = {
       components: [
         "Section", "Container", "TwoColumn", "ThreeColumn",
         "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
-        "Sidebar2Row", "Grid2x2",
+        "Sidebar2Row", "Grid2x2", "Navbar",
         "Layout1", "Layout2", "Layout3", "Layout4",
         "Layout5", "Layout6", "Layout7", "Layout8",
       ],

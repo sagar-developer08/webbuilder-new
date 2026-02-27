@@ -2,6 +2,8 @@ import { useState } from 'react'
 import PageEditor, { SubPage } from '@/features/page-builder/editor/PuckEditor';
 import PageRenderer from '@/features/page-builder/renderer/PageRenderer';
 import { dashboardTemplate, templates } from '@/features/page-builder/templates';
+import { config as appConfig } from "@/config";
+import { useEffect } from 'react';
 
 /**
  * Root App Component
@@ -16,6 +18,19 @@ function App() {
   const [allPages, setAllPages] = useState<SubPage[]>([]);
   const [rootData, setRootData] = useState<any>(null);
   const [mode, setMode] = useState<"pick" | "edit" | "view">("pick");
+  const [sites, setSites] = useState<any[]>([]);
+  const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`${appConfig.apiUrl}/sites`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setSites(data.sites);
+        }
+      })
+      .catch((err) => console.error("Failed to load sites", err));
+  }, []);
 
   const handleNavigate = (pageId: string) => {
     console.log("Navigating to:", pageId);
@@ -46,134 +61,198 @@ function App() {
       <div
         style={{
           minHeight: "100vh",
-          background: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          background: "#f8fafc",
           fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
-          padding: "40px 20px",
+          padding: "60px 20px",
         }}
       >
-        <h1
-          style={{
-            color: "#f8fafc",
-            fontSize: "2.2rem",
-            fontWeight: 700,
-            marginBottom: "8px",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Choose a Template
-        </h1>
-        <p
-          style={{
-            color: "#94a3b8",
-            fontSize: "1rem",
-            marginBottom: "48px",
-          }}
-        >
-          Start from scratch or pick a pre-built layout
-        </p>
-
-        <div
-          style={{
-            display: "flex",
-            gap: "24px",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          {/* Blank template card */}
-          <button
-            onClick={() => {
-              setPageData({ content: [] });
-              setMode("edit");
-            }}
+        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <h1
             style={{
-              width: "260px",
-              minHeight: "200px",
-              background: "rgba(255,255,255,0.04)",
-              border: "2px dashed #475569",
-              borderRadius: "16px",
-              cursor: "pointer",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "12px",
-              transition: "all 0.25s ease",
-              padding: "32px 20px",
-              color: "#cbd5e1",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "#f59e0b";
-              (e.currentTarget as HTMLButtonElement).style.background = "rgba(245,158,11,0.06)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "#475569";
-              (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.04)";
+              color: "#0f172a",
+              fontSize: "24px",
+              fontWeight: 600,
+              marginBottom: "8px",
             }}
           >
-            <span style={{ fontSize: "48px" }}>➕</span>
-            <span style={{ fontSize: "18px", fontWeight: 600 }}>Blank Page</span>
-            <span style={{ fontSize: "13px", color: "#64748b" }}>
-              Start from an empty canvas
-            </span>
-          </button>
+            Start a New Project
+          </h1>
+          <p
+            style={{
+              color: "#64748b",
+              fontSize: "15px",
+              marginBottom: "24px",
+            }}
+          >
+            Choose a template to start from scratch or pick a pre-built layout
+          </p>
 
-          {/* Pre-built templates */}
-          {templates.map((tpl) => (
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              overflowX: "auto",
+              paddingBottom: "24px",
+              marginBottom: "32px",
+            }}
+          >
+            {/* Blank template card */}
             <button
-              key={tpl.name}
               onClick={() => {
-                // Map template name to data
-                if (tpl.name === "Dashboard") {
-                  setPageData(dashboardTemplate);
-                }
+                setPageData({ content: [] });
                 setMode("edit");
               }}
               style={{
-                width: "260px",
-                minHeight: "200px",
-                background: "rgba(255,255,255,0.06)",
-                border: "2px solid #334155",
-                borderRadius: "16px",
+                flex: "0 0 220px",
+                height: "160px",
+                background: "#fff",
+                border: "2px dashed #cbd5e1",
+                borderRadius: "12px",
                 cursor: "pointer",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "12px",
-                transition: "all 0.25s ease",
-                padding: "32px 20px",
-                color: "#e2e8f0",
+                transition: "all 0.2s ease",
+                padding: "20px",
+                color: "#64748b",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "#f59e0b";
-                (e.currentTarget as HTMLButtonElement).style.background = "rgba(245,158,11,0.08)";
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "#94a3b8";
+                (e.currentTarget as HTMLButtonElement).style.background = "#f1f5f9";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "#334155";
-                (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)";
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "#cbd5e1";
+                (e.currentTarget as HTMLButtonElement).style.background = "#fff";
               }}
             >
-              <span style={{ fontSize: "48px" }}>{tpl.thumbnail}</span>
-              <span style={{ fontSize: "18px", fontWeight: 600 }}>{tpl.name}</span>
-              <span
+              <span style={{ fontSize: "32px" }}>➕</span>
+              <span style={{ fontSize: "16px", fontWeight: 600, color: "#0f172a" }}>Blank Canvas</span>
+            </button>
+
+            {/* Pre-built templates */}
+            {templates.map((tpl) => (
+              <button
+                key={tpl.name}
+                onClick={() => {
+                  if (tpl.name === "Dashboard") {
+                    setPageData(dashboardTemplate);
+                  }
+                  setMode("edit");
+                }}
                 style={{
-                  fontSize: "13px",
-                  color: "#94a3b8",
-                  textAlign: "center",
-                  lineHeight: 1.4,
+                  flex: "0 0 220px",
+                  height: "160px",
+                  background: "#fff",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "12px",
+                  transition: "all 0.2s ease",
+                  padding: "20px",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "#cbd5e1";
+                  (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 6px rgba(0,0,0,0.05)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "#e2e8f0";
+                  (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 1px 3px rgba(0,0,0,0.05)";
                 }}
               >
-                {tpl.description}
-              </span>
-            </button>
-          ))}
+                <span style={{ fontSize: "32px" }}>{tpl.thumbnail}</span>
+                <span style={{ fontSize: "16px", fontWeight: 600, color: "#0f172a" }}>{tpl.name}</span>
+                <span style={{ fontSize: "13px", color: "#64748b", textAlign: "center", lineHeight: 1.4 }}>
+                  {tpl.description}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <h2
+            style={{
+              color: "#0f172a",
+              fontSize: "20px",
+              fontWeight: 600,
+              marginBottom: "16px",
+            }}
+          >
+            Your Sites
+          </h2>
+
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: "12px",
+              border: "1px solid #e2e8f0",
+              overflow: "hidden",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+            }}
+          >
+            {sites.length === 0 ? (
+              <div style={{ padding: "40px", textAlign: "center", color: "#94a3b8", fontSize: "15px" }}>
+                You haven't created any sites yet. Start a new project above!
+              </div>
+            ) : (
+              sites.map((site, index) => (
+                <div
+                  key={site.id}
+                  onClick={() => {
+                    setSelectedSiteId(site.id);
+                    setMode("edit");
+                  }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "20px 24px",
+                    borderBottom: index < sites.length - 1 ? "1px solid #e2e8f0" : "none",
+                    cursor: "pointer",
+                    transition: "background 0.2s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "#f1f5f9")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                    <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "#e0f2fe", color: "#0369a1", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>
+                      🌐
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, color: "#0f172a", fontSize: "16px", marginBottom: "4px" }}>
+                        {site.title || "Untitled Site"}
+                      </div>
+                      <div style={{ color: "#64748b", fontSize: "14px" }}>
+                        {site.subdomain}
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      color: "#3b82f6",
+                      fontSize: "14px",
+                      fontWeight: 500,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px"
+                    }}
+                  >
+                    Edit Site
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     );
@@ -184,6 +263,7 @@ function App() {
     return (
       <PageEditor
         initialData={pageData}
+        initialSiteId={selectedSiteId}
         onPublish={(data, pages, rootContent) => {
           // If we are editing a subpage, 'data' is the subpage content.
           // If we are editing root, 'data' is root content.

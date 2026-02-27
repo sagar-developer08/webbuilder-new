@@ -1,4 +1,4 @@
-import { Data, Puck, usePuck } from "@puckeditor/core";
+import { Data, Puck, usePuck, Plugin, blocksPlugin, outlinePlugin } from "@puckeditor/core";
 import "@puckeditor/core/dist/index.css";
 import { useEffect, useState } from "react";
 import { Button } from "../../../ui/button";
@@ -8,6 +8,7 @@ import { config as puckConfig } from "../config/puckConfig";
 interface Props {
   onPublish: (data: Data, pages?: SubPage[], rootContent?: Data) => void;
   initialData?: Data & { id?: string; title?: string; subdomain?: string };
+  initialSiteId?: string | null;
 }
 
 // Sub-page interface
@@ -33,9 +34,7 @@ function SaveHeader({ onSave, onPublish, pages, rootContent }: { onSave: (data: 
   );
 }
 
-export default function PageEditor({ onPublish, initialData }: Props) {
-  // State for all saved sites list
-  const [sites, setSites] = useState<any[]>([]);
+export default function PageEditor({ onPublish, initialData, initialSiteId }: Props) {
 
   // State for current site
   const [currentSiteId, setCurrentSiteId] = useState<string | null>(
@@ -106,21 +105,12 @@ export default function PageEditor({ onPublish, initialData }: Props) {
     setEditorConfig(newConfig as any);
   }, [pages]);
 
-  // Initial fetch of sites
+  // Load initial site if passed
   useEffect(() => {
-    fetchSites();
-  }, []);
-
-  const fetchSites = () => {
-    fetch(`${appConfig.apiUrl}/sites`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setSites(data.sites);
-        }
-      })
-      .catch((err) => console.error("Failed to load sites", err));
-  };
+    if (initialSiteId && initialSiteId !== currentSiteId) {
+      handleLoadSite(initialSiteId);
+    }
+  }, [initialSiteId]);
 
   // Helper to switch pages
   const switchPage = (targetPageId: string) => {
@@ -245,7 +235,6 @@ export default function PageEditor({ onPublish, initialData }: Props) {
         if (json.site) {
           setCurrentSiteId(json.site.id);
           setCurrentSiteMeta({ title: json.site.title, subdomain: json.site.subdomain });
-          fetchSites(); // Refresh list
         }
       } else {
         alert(`Failed to save: ${json.msg}`);
@@ -294,192 +283,66 @@ export default function PageEditor({ onPublish, initialData }: Props) {
     }
   };
 
-  const handleDeleteSite = async (e: React.MouseEvent, siteId: string) => {
-    e.stopPropagation(); // Prevent loading the site
-    if (!confirm("Are you sure you want to delete this site?")) return;
-
-    try {
-      const res = await fetch(`${appConfig.apiUrl}/sites/${siteId}`, {
-        method: "DELETE",
-      });
-      if (res.ok) {
-        setSites(prev => prev.filter(s => s.id !== siteId));
-        if (currentSiteId === siteId) {
-          // Reset editor if current site was deleted
-          window.location.reload();
-        }
-      } else {
-        alert("Failed to delete site");
-      }
-    } catch (e) {
-      console.error(e);
-      alert("Error deleting site");
-    }
-  };
-
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  return (
-    <div style={{ display: "flex", width: "100%", height: "100vh" }}>
-      {/* Sidebar (Saved Sites + Pages) */}
-      <div style={{
-        width: sidebarOpen ? "250px" : "0",
-        background: "#fff",
-        borderRight: sidebarOpen ? "1px solid #e2e8f0" : "none",
-        display: "flex",
-        flexDirection: "column",
-        zIndex: 10,
-        height: "100vh",
-        transition: "width 0.3s ease",
-        overflow: "hidden",
-        position: "relative"
-      }}>
-        {/* Top Half: Saved Sites */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, borderBottom: "1px solid #e2e8f0", opacity: sidebarOpen ? 1 : 0, transition: "opacity 0.2s" }}>
-          <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0" }}>
-            <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>Saved Sites</h3>
-          </div>
-          <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
-            {sites.map(site => (
-              <div
-                key={site.id}
-                onClick={() => handleLoadSite(site.id)}
-                style={{
-                  padding: "10px",
-                  marginBottom: "8px",
-                  borderRadius: "6px",
-                  background: site.id === currentSiteId ? "#e0f2fe" : "#f8fafc",
-                  border: "1px solid",
-                  borderColor: site.id === currentSiteId ? "#bae6fd" : "#e2e8f0",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <div style={{ overflow: "hidden" }}>
-                  <div style={{ fontWeight: 500, fontSize: "14px", marginBottom: "4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                    {site.title || "Untitled"}
-                  </div>
-                  <div style={{ fontSize: "12px", color: "#64748b" }}>
-                    {site.subdomain}
-                  </div>
-                </div>
-                <button
-                  onClick={(e) => handleDeleteSite(e, site.id)}
-                  style={{
-                    color: "#ef4444",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    marginLeft: "8px",
-                    padding: "4px"
-                  }}
-                  title="Delete Site"
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
-            {sites.length === 0 && <div style={{ color: "#94a3b8", fontSize: "13px", padding: "8px" }}>No saved sites</div>}
-
-            <div style={{ marginTop: "auto", paddingTop: "10px", borderTop: "1px solid #eee" }}>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (confirm("Create new site? Unsaved changes will be lost.")) {
-                    window.location.reload();
-                  }
-                }}
-                style={{ width: "100%" }}
-              >
-                + Create New Site
-              </Button>
-            </div>
-          </div>
+  const pagesPlugin: Plugin = {
+    name: "pages",
+    label: "Pages",
+    render: () => (
+      <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "#f8fafc" }}>
+        <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>Pages</h3>
+          <Button size="sm" variant="outline" onClick={handleCreatePage}>+ New</Button>
         </div>
-
-        {/* Bottom Half: Pages */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
-          <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>Pages</h3>
-            <Button size="sm" variant="outline" onClick={handleCreatePage}>+ New</Button>
+        <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
+          <div
+            onClick={() => switchPage("root")}
+            style={{
+              padding: "10px",
+              marginBottom: "8px",
+              borderRadius: "6px",
+              background: activePageId === "root" ? "#e0f2fe" : "#fff",
+              border: "1px solid",
+              borderColor: activePageId === "root" ? "#bae6fd" : "#e2e8f0",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ fontWeight: 500, fontSize: "14px" }}>Home</div>
           </div>
-          <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
+          {pages.map(page => (
             <div
-              onClick={() => switchPage("root")}
+              key={page.id}
+              onClick={() => switchPage(page.id)}
               style={{
                 padding: "10px",
                 marginBottom: "8px",
                 borderRadius: "6px",
-                background: activePageId === "root" ? "#e0f2fe" : "#f8fafc",
+                background: activePageId === page.id ? "#e0f2fe" : "#fff",
                 border: "1px solid",
-                borderColor: activePageId === "root" ? "#bae6fd" : "#e2e8f0",
+                borderColor: activePageId === page.id ? "#bae6fd" : "#e2e8f0",
                 cursor: "pointer",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
               }}
             >
-              <div style={{ fontWeight: 500, fontSize: "14px" }}>Home</div>
+              <div style={{ fontWeight: 500, fontSize: "14px" }}>{page.title}</div>
+              <div style={{ fontSize: "10px", color: "#64748b" }}>/{page.slug}</div>
             </div>
-            {pages.map(page => (
-              <div
-                key={page.id}
-                onClick={() => switchPage(page.id)}
-                style={{
-                  padding: "10px",
-                  marginBottom: "8px",
-                  borderRadius: "6px",
-                  background: activePageId === page.id ? "#e0f2fe" : "#f8fafc",
-                  border: "1px solid",
-                  borderColor: activePageId === page.id ? "#bae6fd" : "#e2e8f0",
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <div style={{ fontWeight: 500, fontSize: "14px" }}>{page.title}</div>
-                <div style={{ fontSize: "10px", color: "#64748b" }}>/{page.slug}</div>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
+    )
+  };
 
+  return (
+    <div style={{ display: "flex", width: "100%", height: "100vh" }}>
       {/* Puck Editor */}
       <div style={{ flex: 1, position: "relative" }}>
-
-        {/* Sidebar Toggle Button */}
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          style={{
-            position: "absolute",
-            top: "12px",
-            left: "12px",
-            zIndex: 100, // Above Puck toolbar
-            background: "#f8fafc",
-            border: "1px solid #e2e8f0",
-            borderRadius: "4px",
-            width: "32px", height: "32px",
-            cursor: "pointer",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-            display: "flex", alignItems: "center", justifyContent: "center"
-          }}
-          title={sidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
-        >
-          {/* Simple Menu Icon */}
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {sidebarOpen ? (
-              <path d="M19 12H5m7-7l-7 7 7 7" />
-            ) : (
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
 
         <Puck
           key={puckKey}
           config={editorConfig}
+          data={currentPuckData}
+          plugins={[blocksPlugin(), outlinePlugin(), pagesPlugin]}
           data={currentPuckData}
           onPublish={onPublish}
           onChange={(newData) => {

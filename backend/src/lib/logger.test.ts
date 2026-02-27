@@ -13,7 +13,7 @@ const existsSyncMock = vi.fn().mockReturnValue(true);
 const mkdirSyncMock = vi.fn();
 
 vi.mock("fs", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("fs")>();
+  const actual = await importOriginal<any>();
   return {
     ...actual,
     default: {

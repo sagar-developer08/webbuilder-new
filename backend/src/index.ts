@@ -1,7 +1,6 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import { authRoutes } from './routes/auth.js'
 import { siteRoutes } from './routes/sites.js'
 import { publicRoutes } from './routes/public.js'
 import { logRoutes } from './routes/logs.js'
@@ -36,7 +35,6 @@ app.use(
 app.use(express.json())
 app.use(requestLogger)
 
-app.use('/api/auth', authRoutes)
 app.use('/api/logs', logRoutes)
 app.use('/api/superset', supersetRoutes)
 app.use('/api', publicRoutes)

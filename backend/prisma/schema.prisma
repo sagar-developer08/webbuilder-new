@@ -9,59 +9,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  pages    Page[]
-  sessions Session[]
-}
-
-model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token     String   @unique @db.Text
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-}
-
 model Page {
-  id           String   @id @default(cuid())
-  userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id           String  @id @default(cuid())
   title        String
-  previewImage String?  @db.Text
-  favicon      String?  @db.Text
-  visible      Boolean  @default(false)
-  content      String?  @db.Text
-  pages        Json?    // Array of { id, slug, title, content } for additional pages
-  subdomain    String   @unique
+  previewImage String? @db.Text
+  favicon      String? @db.Text
+  visible      Boolean @default(false)
+  content      String? @db.Text
+  pages        Json? // Array of { id, slug, title, content } for additional pages
+  subdomain    String  @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([id, userId])
+  @@index([id])
 }
 
 model ActivityLog {
   id        String   @id @default(cuid())
-  level     String   // info | warn | error
-  action    String   // e.g. auth_login, sites_create, request
+  level     String // info | warn | error
+  action    String // e.g. auth_login, sites_create, request
   message   String   @db.Text
-  userId    String?  // null for unauthenticated
   meta      String?  @db.Text // JSON: path, method, statusCode, etc.
-  source    String?  // backend | frontend
+  source    String? // backend | frontend
   createdAt DateTime @default(now())
 
-  @@index([userId, createdAt])
   @@index([action, createdAt])
 }

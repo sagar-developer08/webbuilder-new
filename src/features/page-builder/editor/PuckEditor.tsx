@@ -112,10 +112,7 @@ export default function PageEditor({ onPublish, initialData }: Props) {
   }, []);
 
   const fetchSites = () => {
-    const token = localStorage.getItem("token") || "dummy";
-    fetch(`${appConfig.apiUrl}/sites`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(`${appConfig.apiUrl}/sites`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -182,7 +179,6 @@ export default function PageEditor({ onPublish, initialData }: Props) {
   };
 
   const handleSave = async (data: Data) => {
-    const token = localStorage.getItem("token") || "dummy";
 
     let title = currentSiteMeta.title || "Untitled Site";
     let subdomain = currentSiteMeta.subdomain || `site-${Date.now()}`;
@@ -228,7 +224,6 @@ export default function PageEditor({ onPublish, initialData }: Props) {
         method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -265,11 +260,8 @@ export default function PageEditor({ onPublish, initialData }: Props) {
     if (currentSiteId === siteId) return;
     if (!confirm("Switch to this site? Any unsaved changes will be lost.")) return;
 
-    const token = localStorage.getItem("token") || "dummy";
     try {
-      const res = await fetch(`${appConfig.apiUrl}/sites/${siteId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await fetch(`${appConfig.apiUrl}/sites/${siteId}`);
       const json = await res.json();
       if (json.success && json.site) {
         const site = json.site;
@@ -306,11 +298,9 @@ export default function PageEditor({ onPublish, initialData }: Props) {
     e.stopPropagation(); // Prevent loading the site
     if (!confirm("Are you sure you want to delete this site?")) return;
 
-    const token = localStorage.getItem("token") || "dummy";
     try {
       const res = await fetch(`${appConfig.apiUrl}/sites/${siteId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
         setSites(prev => prev.filter(s => s.id !== siteId));

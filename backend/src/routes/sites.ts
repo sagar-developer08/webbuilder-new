@@ -2,7 +2,6 @@ import { Router } from 'express'
 import { z } from 'zod'
 import { prisma } from '../lib/prisma.js'
 import { logInfo } from '../lib/logger.js'
-import { authenticateToken } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -23,51 +22,12 @@ const updateSiteSchema = createSiteSchema.partial().extend({
   pages: z.any().optional(), // Prisma handles strict JSON validation, but we can refine if needed
 })
 
-// router.use(authenticateToken);
-
-// Temporary middleware to mock auth for development
-router.use(async (req, res, next) => {
-  // If authenticateToken was commented out, req.user is undefined.
-  if (!req.user) {
-    // Ensure we have a valid user in DB to attach pages to
-    let devUser = await prisma.user.findFirst({ where: { email: 'dev@example.com' } })
-
-    if (!devUser) {
-      try {
-        // Create a dev user on the fly if needed
-        // Use a simple password hash or dummy string if hashing is not strict
-        devUser = await prisma.user.create({
-          data: {
-            email: 'dev@example.com',
-            password: '$2a$10$dummyhashforlocaldevonly1234567890abcdefghijklmno',
-            name: 'Developer',
-          },
-        })
-      } catch (e) {
-        // If creation fails (e.g. race condition), try finding any user
-        devUser = await prisma.user.findFirst()
-      }
-    }
-
-    if (devUser) {
-      // Cast to any to avoid strict type checking issues if JwtPayload doesn't match perfectly
-      ;(req as any).user = { userId: devUser.id, email: devUser.email }
-    } else {
-      console.warn(
-        'No dev user found or created. Site operations might fail due to missing relation.'
-      )
-      ;(req as any).user = { userId: 'dev-user-id', email: 'dev@example.com' }
-    }
-  }
-  next()
-})
 
 router.get('/', async (req, res) => {
   const sites = await prisma.page.findMany({
-    where: { userId: req.user!.userId },
     orderBy: { updatedAt: 'desc' },
   })
-  logInfo('sites_list', 'User listed sites', { count: sites.length }, req.user!.userId)
+  logInfo('sites_list', 'Listed sites', { count: sites.length })
   res.json({ success: true, sites })
 })
 
@@ -88,18 +48,12 @@ router.post('/', async (req, res) => {
 
     const site = await prisma.page.create({
       data: {
-        userId: req.user!.userId,
         title,
         subdomain,
         content: content || null,
       },
     })
-    logInfo(
-      'sites_create',
-      'User created site',
-      { siteId: site.id, title, subdomain },
-      req.user!.userId
-    )
+    logInfo('sites_create', 'Created site', { siteId: site.id, title, subdomain })
     res.status(201).json({ success: true, site })
   } catch (e) {
     if (e instanceof z.ZodError) {
@@ -111,17 +65,17 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const site = await prisma.page.findFirst({
-    where: { id: req.params.id, userId: req.user!.userId },
+    where: { id: req.params.id },
   })
   if (!site) return res.status(404).json({ success: false, msg: 'Site not found' })
-  logInfo('sites_get', 'User fetched site', { siteId: site.id }, req.user!.userId)
+  logInfo('sites_get', 'Fetched site', { siteId: site.id })
   res.json({ success: true, site })
 })
 
 router.put('/:id', async (req, res) => {
   try {
     const site = await prisma.page.findFirst({
-      where: { id: req.params.id, userId: req.user!.userId },
+      where: { id: req.params.id },
     })
     if (!site) return res.status(404).json({ success: false, msg: 'Site not found' })
 
@@ -147,7 +101,7 @@ router.put('/:id', async (req, res) => {
         ...(pages != null && { pages }),
       },
     })
-    logInfo('sites_update', 'User updated site', { siteId: updated.id }, req.user!.userId)
+    logInfo('sites_update', 'Updated site', { siteId: updated.id })
     res.json({ success: true, site: updated })
   } catch (e) {
     if (e instanceof z.ZodError) {
@@ -159,12 +113,12 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   const site = await prisma.page.findFirst({
-    where: { id: req.params.id, userId: req.user!.userId },
+    where: { id: req.params.id },
   })
   if (!site) return res.status(404).json({ success: false, msg: 'Site not found' })
 
   await prisma.page.delete({ where: { id: req.params.id } })
-  logInfo('sites_delete', 'User deleted site', { siteId: req.params.id }, req.user!.userId)
+  logInfo('sites_delete', 'Deleted site', { siteId: req.params.id })
   res.json({ success: true })
 })
 

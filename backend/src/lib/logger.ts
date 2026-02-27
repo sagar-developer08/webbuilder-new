@@ -9,7 +9,6 @@ export interface LogEntry {
   level: LogLevel;
   action: string;
   message: string;
-  userId?: string | null;
   meta?: Record<string, unknown>;
   source?: "backend" | "frontend";
 }
@@ -45,7 +44,6 @@ async function writeToDb(entry: LogEntry) {
         level: entry.level,
         action: entry.action,
         message: entry.message,
-        userId: entry.userId ?? null,
         meta: entry.meta ? JSON.stringify(entry.meta) : null,
         source: entry.source ?? "backend",
       },
@@ -63,24 +61,23 @@ export function log(entry: LogEntry) {
   writeToDb(entry).catch(() => {});
 }
 
-export function logInfo(action: string, message: string, meta?: Record<string, unknown>, userId?: string | null) {
-  log({ level: "info", action, message, userId, meta, source: "backend" });
+export function logInfo(action: string, message: string, meta?: Record<string, unknown>) {
+  log({ level: "info", action, message, meta, source: "backend" });
 }
 
-export function logWarn(action: string, message: string, meta?: Record<string, unknown>, userId?: string | null) {
-  log({ level: "warn", action, message, userId, meta, source: "backend" });
+export function logWarn(action: string, message: string, meta?: Record<string, unknown>) {
+  log({ level: "warn", action, message, meta, source: "backend" });
 }
 
-export function logError(action: string, message: string, meta?: Record<string, unknown>, userId?: string | null) {
-  log({ level: "error", action, message, userId, meta, source: "backend" });
+export function logError(action: string, message: string, meta?: Record<string, unknown>) {
+  log({ level: "error", action, message, meta, source: "backend" });
 }
 
-export function logRequest(entry: Omit<LogEntry, "action"> & { action?: string }) {
+export function logRequest(entry: Omit<LogEntry, "action" | "level"> & { action?: string }) {
   log({
     level: "info",
     action: entry.action ?? "request",
     message: entry.message,
-    userId: entry.userId,
     meta: entry.meta,
     source: "backend",
   });

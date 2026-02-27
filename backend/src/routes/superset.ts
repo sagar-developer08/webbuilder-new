@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { authenticateToken } from "../middleware/auth.js";
 import { fetchSupersetCharts, getSupersetBaseUrl } from "../services/superset.js";
 import { logInfo } from "../lib/logger.js";
 
@@ -10,12 +9,12 @@ const router = Router();
  * Returns list of Superset charts. Requires user to be logged in (JWT or Keycloak token).
  * Backend fetches token from Superset using env credentials and caches it.
  */
-router.get("/charts", authenticateToken, async (req, res) => {
+router.get("/charts", async (req, res) => {
   try {
     const charts = await fetchSupersetCharts();
     const baseUrl = getSupersetBaseUrl();
 
-    logInfo("superset_charts", "User fetched Superset charts", { count: charts.length }, req.user!.userId);
+    logInfo("superset_charts", "Fetched Superset charts", { count: charts.length });
 
     res.json({
       success: true,
@@ -35,7 +34,7 @@ router.get("/charts", authenticateToken, async (req, res) => {
  * GET /api/superset/config
  * Returns Superset base URL for embedding. Requires user to be logged in.
  */
-router.get("/config", authenticateToken, (req, res) => {
+router.get("/config", (req, res) => {
   const baseUrl = getSupersetBaseUrl();
   res.json({ success: true, baseUrl });
 });

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
 import { log } from "../lib/logger.js";
-import { optionalAuth } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -13,14 +12,13 @@ const logBodySchema = z.object({
   source: z.enum(["frontend", "backend"]).optional(),
 });
 
-router.post("/", optionalAuth, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const body = logBodySchema.parse(req.body);
     log({
       level: body.level as "info" | "warn" | "error" | "debug",
       action: body.action,
       message: body.message,
-      userId: req.user?.userId ?? null,
       meta: body.meta,
       source: body.source ?? "frontend",
     });

@@ -4,6 +4,8 @@ import PageRenderer from '@/features/page-builder/renderer/PageRenderer';
 import { dashboardTemplate, templates } from '@/features/page-builder/templates';
 import { config as appConfig } from "@/config";
 import { useEffect } from 'react';
+import { useAuth } from '@/features/auth/AuthContext';
+import AuthModal from '@/features/auth/components/AuthModal';
 
 /**
  * Root App Component
@@ -21,8 +23,16 @@ function App() {
   const [sites, setSites] = useState<any[]>([]);
   const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
 
+  const { user, token, isLoading, logout } = useAuth();
+
   useEffect(() => {
-    fetch(`${appConfig.apiUrl}/sites`)
+    if (!token) return;
+
+    fetch(`${appConfig.apiUrl}/sites`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -30,7 +40,7 @@ function App() {
         }
       })
       .catch((err) => console.error("Failed to load sites", err));
-  }, []);
+  }, [token, mode]); // Add mode dependency to refresh sites when returning to picker
 
   const handleNavigate = (pageId: string) => {
     console.log("Navigating to:", pageId);
@@ -55,6 +65,14 @@ function App() {
     }
   };
 
+  if (isLoading) {
+    return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f8fafc" }}>Loading...</div>;
+  }
+
+  if (!user) {
+    return <AuthModal />;
+  }
+
   // ----- Template picker -----
   if (mode === "pick") {
     return (
@@ -66,7 +84,19 @@ function App() {
           padding: "60px 20px",
         }}
       >
-        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+        <div style={{ width: "100%", maxWidth: "1000px", display: "flex", justifyContent: "flex-end", marginBottom: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "#fff", padding: "8px 16px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+            <span style={{ fontSize: "14px", fontWeight: 500, color: "#334155" }}>{user.name || user.email}</span>
+            <button
+              onClick={logout}
+              style={{ background: "none", border: "none", color: "#ef4444", fontSize: "14px", cursor: "pointer", padding: "4px 8px" }}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <div style={{ maxWidth: "1000px", margin: "0 auto", width: "100%" }}>
           <h1
             style={{
               color: "#0f172a",

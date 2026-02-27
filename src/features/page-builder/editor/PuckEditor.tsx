@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../../../ui/button";
 import { config as appConfig } from "../../../config";
 import { config as puckConfig } from "../config/puckConfig";
+import { useAuth } from "../../auth/AuthContext";
 
 interface Props {
   onPublish: (data: Data, pages?: SubPage[], rootContent?: Data) => void;
@@ -35,6 +36,7 @@ function SaveHeader({ onSave, onPublish, pages, rootContent }: { onSave: (data: 
 }
 
 export default function PageEditor({ onPublish, initialData, initialSiteId }: Props) {
+  const { token } = useAuth();
 
   // State for current site
   const [currentSiteId, setCurrentSiteId] = useState<string | null>(
@@ -214,6 +216,7 @@ export default function PageEditor({ onPublish, initialData, initialSiteId }: Pr
         method,
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(payload),
       });
@@ -250,7 +253,11 @@ export default function PageEditor({ onPublish, initialData, initialSiteId }: Pr
     if (!confirm("Switch to this site? Any unsaved changes will be lost.")) return;
 
     try {
-      const res = await fetch(`${appConfig.apiUrl}/sites/${siteId}`);
+      const res = await fetch(`${appConfig.apiUrl}/sites/${siteId}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       const json = await res.json();
       if (json.success && json.site) {
         const site = json.site;
@@ -343,7 +350,6 @@ export default function PageEditor({ onPublish, initialData, initialSiteId }: Pr
           config={editorConfig}
           data={currentPuckData}
           plugins={[blocksPlugin(), outlinePlugin(), pagesPlugin]}
-          data={currentPuckData}
           onPublish={onPublish}
           onChange={(newData) => {
             setCurrentPuckData(newData);

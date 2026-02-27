@@ -9,6 +9,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  pages     Page[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Page {
   id           String  @id @default(cuid())
   title        String
@@ -19,10 +30,14 @@ model Page {
   pages        Json? // Array of { id, slug, title, content } for additional pages
   subdomain    String  @unique
 
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([id])
+  @@index([userId])
 }
 
 model ActivityLog {

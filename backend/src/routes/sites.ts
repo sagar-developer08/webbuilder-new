@@ -2,8 +2,12 @@ import { Router } from 'express'
 import { z } from 'zod'
 import { prisma } from '../lib/prisma.js'
 import { logInfo } from '../lib/logger.js'
+import { auth } from '../middleware/auth.js'
 
 const router = Router()
+
+// Protect all site routes with auth middleware
+router.use(auth)
 
 const createSiteSchema = z.object({
   title: z.string().min(1).max(100),
@@ -25,9 +29,10 @@ const updateSiteSchema = createSiteSchema.partial().extend({
 
 router.get('/', async (req, res) => {
   const sites = await prisma.page.findMany({
+    where: { userId: req.user.id },
     orderBy: { updatedAt: 'desc' },
   })
-  logInfo('sites_list', 'Listed sites', { count: sites.length })
+  logInfo('sites_list', 'Listed sites', { count: sites.length, userId: req.user.id })
   res.json({ success: true, sites })
 })
 
@@ -51,9 +56,10 @@ router.post('/', async (req, res) => {
         title,
         subdomain,
         content: content || null,
+        userId: req.user.id,
       },
     })
-    logInfo('sites_create', 'Created site', { siteId: site.id, title, subdomain })
+    logInfo('sites_create', 'Created site', { siteId: site.id, title, subdomain, userId: req.user.id })
     res.status(201).json({ success: true, site })
   } catch (e) {
     if (e instanceof z.ZodError) {
@@ -65,9 +71,9 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const site = await prisma.page.findFirst({
-    where: { id: req.params.id },
+    where: { id: req.params.id, userId: req.user.id },
   })
-  if (!site) return res.status(404).json({ success: false, msg: 'Site not found' })
+  if (!site) return res.status(404).json({ success: false, msg: 'Site not found or unauthorized' })
   logInfo('sites_get', 'Fetched site', { siteId: site.id })
   res.json({ success: true, site })
 })
@@ -75,9 +81,9 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const site = await prisma.page.findFirst({
-      where: { id: req.params.id },
+      where: { id: req.params.id, userId: req.user.id },
     })
-    if (!site) return res.status(404).json({ success: false, msg: 'Site not found' })
+    if (!site) return res.status(404).json({ success: false, msg: 'Site not found or unauthorized' })
 
     const { title, subdomain, previewImage, favicon, content, visible, pages } =
       updateSiteSchema.parse(req.body)
@@ -113,9 +119,9 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   const site = await prisma.page.findFirst({
-    where: { id: req.params.id },
+    where: { id: req.params.id, userId: req.user.id },
   })
-  if (!site) return res.status(404).json({ success: false, msg: 'Site not found' })
+  if (!site) return res.status(404).json({ success: false, msg: 'Site not found or unauthorized' })
 
   await prisma.page.delete({ where: { id: req.params.id } })
   logInfo('sites_delete', 'Deleted site', { siteId: req.params.id })

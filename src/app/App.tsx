@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import PageEditor from '@/features/page-builder/editor/PuckEditor';
+import PageEditor, { SubPage } from '@/features/page-builder/editor/PuckEditor';
 import PageRenderer from '@/features/page-builder/renderer/PageRenderer';
 import { dashboardTemplate, templates } from '@/features/page-builder/templates';
 
@@ -13,7 +13,26 @@ import { dashboardTemplate, templates } from '@/features/page-builder/templates'
  */
 function App() {
   const [pageData, setPageData] = useState<any>({ content: [] });
+  const [allPages, setAllPages] = useState<SubPage[]>([]);
+  const [rootData, setRootData] = useState<any>(null);
   const [mode, setMode] = useState<"pick" | "edit" | "view">("pick");
+
+  const handleNavigate = (pageId: string) => {
+    console.log("Navigating to:", pageId);
+
+    if (pageId === "root" || !pageId) {
+      if (rootData) setPageData(rootData);
+      return;
+    }
+
+    const page = allPages.find(p => p.id === pageId);
+    if (page) {
+      try {
+        const content = JSON.parse(page.content);
+        setPageData(content);
+      } catch (e) { console.error("Failed to parse page content", e); }
+    }
+  };
 
   // ----- Template picker -----
   if (mode === "pick") {
@@ -159,8 +178,11 @@ function App() {
     return (
       <PageEditor
         initialData={pageData}
-        onPublish={(data) => {
-          setPageData(data);
+        onPublish={(data, pages, rootContent) => {
+          setPageData(data); // Start preview with what we were just editing
+          if (pages) setAllPages(pages);
+          // If rootContent provided, use it. If not provided (single page edit), assume data is root.
+          setRootData(rootContent || data);
           setMode("view");
         }}
       />
@@ -200,7 +222,7 @@ function App() {
           New Page
         </button>
       </div>
-      <PageRenderer data={pageData} />
+      <PageRenderer data={pageData} onNavigate={handleNavigate} />
     </div>
   );
 }

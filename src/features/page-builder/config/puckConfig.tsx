@@ -44,6 +44,7 @@ import { EmbedBlock } from "../blocks/EmbedBlock";
 
 // Link blocks
 import { LinkBlock } from "../blocks/LinkBlock";
+import { PageLink } from "../blocks/PageLink";
 
 // Form blocks
 import { FormBlock } from "../blocks/FormBlock";
@@ -118,6 +119,7 @@ export const config: Config = {
 
     // Link
     Link: withResize(LinkBlock),
+    PageLink: PageLink,
 
     // Form
     Form: withResize(FormBlock),
@@ -167,7 +169,7 @@ export const config: Config = {
       components: ["Video", "Audio", "Marquee", "Icon", "Embed"],
     },
     Link: {
-      components: ["Link"],
+      components: ["Link", "PageLink"],
     },
     Form: {
       components: ["Form", "Input", "Textarea", "Select", "Checkbox", "Radio", "SubmitButton"],

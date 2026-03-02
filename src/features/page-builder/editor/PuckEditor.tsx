@@ -77,7 +77,7 @@ export default function PageEditor({ onPublish, initialData, initialSiteId }: Pr
         PageLink: {
           ...puckConfig.components.PageLink,
           fields: {
-            ...puckConfig.components.PageLink.fields,
+            ...puckConfig.components.PageLink?.fields,
             pageId: {
               type: "select" as const,
               options: pageOptions
@@ -89,7 +89,7 @@ export default function PageEditor({ onPublish, initialData, initialSiteId }: Pr
           fields: {
             ...puckConfig.components.Navbar?.fields,
             links: {
-              ...puckConfig.components.Navbar?.fields.links,
+              ...puckConfig.components.Navbar?.fields?.links,
               type: "array", // TypeScript might need this re-asserted if lost
               arrayFields: {
                 //@ts-ignore - TS might complain about deep access

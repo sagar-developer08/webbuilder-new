@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, useEffect, ReactNode } from 'react'
+import { useMemo, useRef, useState, ReactNode } from 'react'
 import styles from './VirtualList.module.scss'
 
 interface VirtualListProps<T> {

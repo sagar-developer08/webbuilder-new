@@ -34,7 +34,7 @@ export const SubmitButtonBlock = {
             <button
                 type="submit"
                 style={{
-                    width: props.width !== "auto" ? props.width : undefined,
+                    width: props.fullWidth === "true" ? "100%" : (props.width !== "auto" ? props.width : undefined),
                     height: props.height !== "auto" ? props.height : undefined,
                     backgroundColor: props.backgroundColor,
                     color: props.color,
@@ -45,7 +45,6 @@ export const SubmitButtonBlock = {
                     fontSize: "14px",
                     fontWeight: 600,
                     cursor: "pointer",
-                    width: props.fullWidth === "true" ? "100%" : "auto",
                 }}
             >
                 {props.label}

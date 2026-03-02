@@ -5,6 +5,7 @@ import styles from './FormField.module.scss'
 interface BaseFormFieldProps {
   label: string
   error?: string
+  id?: string
 }
 
 interface FormFieldInputProps

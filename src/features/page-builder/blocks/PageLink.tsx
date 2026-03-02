@@ -57,7 +57,7 @@ export const PageLink: ComponentConfig<PageLinkProps> = {
                 href={href}
                 onClick={handleClick}
                 className={className}
-                style={{ ...style, display: "inline-block", cursor: "pointer", color: "blue", textDecoration: "underline" }}
+                style={{ ...style, display: "inline-block", cursor: "pointer", color: "blue", textDecoration: "underline" } as React.CSSProperties}
             >
                 {text}
             </a>

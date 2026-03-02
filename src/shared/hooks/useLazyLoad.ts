@@ -24,7 +24,9 @@ export function useLazyLoad(options: UseLazyLoadOptions = {}) {
     if (!element) return
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        const entry = entries[0]
+        if (!entry) return
         if (entry.isIntersecting) {
           setIsVisible(true)
           setHasLoaded(true)

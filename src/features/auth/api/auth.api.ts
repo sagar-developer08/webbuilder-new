@@ -70,7 +70,7 @@ export const authApi = {
   /**
    * Refresh token (demo - generates new token)
    */
-  refreshToken: async (refreshToken: string): Promise<LoginResponse> => {
+  refreshToken: async (_refreshToken: string): Promise<LoginResponse> => {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 300))
 

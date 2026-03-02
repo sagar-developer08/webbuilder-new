@@ -1,5 +1,4 @@
 import "./blocks-responsive.css";
-
 const ALLOWED_CHILDREN = [
     "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
     "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
@@ -32,6 +31,8 @@ export const Grid2x2Block = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -40,6 +41,8 @@ export const Grid2x2Block = {
         margin: "0px",
         borderRadius: "4px",
         background: "#ef4444",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -57,6 +60,8 @@ export const Grid2x2Block = {
             <div
                 className="pb-grid2x2"
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
                     gridTemplateRows: "auto auto",
@@ -87,17 +92,17 @@ export const Grid2x2Block = {
 
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <TopLeft />
-                </div>
+                    </div>
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <TopRight />
-                </div>
+                    </div>
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <BottomLeft />
-                </div>
+                    </div>
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <BottomRight />
-                </div>
-            </div>
-        );
+                    </div>
+                    </div>
+                    );
     },
 };

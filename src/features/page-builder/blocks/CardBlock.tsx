@@ -8,6 +8,8 @@ export const CardBlock = {
         borderRadius: { type: "text" },
         margin: { type: "text" },
         boxShadow: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -19,12 +21,16 @@ export const CardBlock = {
         borderRadius: "12px",
         margin: "0px",
         boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     backgroundColor: props.backgroundColor,
                     borderRadius: props.borderRadius,
                     border: "1px solid #e2e8f0",

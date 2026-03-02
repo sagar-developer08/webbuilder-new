@@ -23,10 +23,6 @@ export const BarChartBlock = {
         dataset2Color: { type: "text" },
         height: { type: "text" },
         padding: { type: "text" },
-        margin: { type: "text" },
-        borderRadius: { type: "text" },
-        boxShadow: { type: "text" },
-        background: { type: "text" },
     },
 
     defaultProps: {
@@ -40,10 +36,6 @@ export const BarChartBlock = {
         dataset2Color: "#f59e0b",
         height: "300px",
         padding: "20px",
-        margin: "0px",
-        borderRadius: "12px",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-        background: "#fff",
     },
 
     render: (props: any) => {
@@ -94,11 +86,10 @@ export const BarChartBlock = {
             <div
                 className="pb-chart"
                 style={{
-                    background: props.background ?? "#fff",
-                    borderRadius: props.borderRadius ?? "12px",
+                    background: "#fff",
+                    borderRadius: "12px",
                     padding: props.padding,
-                    margin: props.margin ?? "0px",
-                    boxShadow: props.boxShadow ?? "0 1px 3px rgba(0,0,0,0.08)",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                     height: props.height,
                 }}
             >

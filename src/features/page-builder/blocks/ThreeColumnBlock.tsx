@@ -26,6 +26,8 @@ export const ThreeColumnBlock = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -34,6 +36,8 @@ export const ThreeColumnBlock = {
         margin: "0px",
         borderRadius: "4px",
         background: "#8b5cf6",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -42,6 +46,8 @@ export const ThreeColumnBlock = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexWrap: "wrap",
                     gap,

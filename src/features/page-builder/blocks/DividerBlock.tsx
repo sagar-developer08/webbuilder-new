@@ -12,6 +12,8 @@ export const DividerBlock = {
         },
         margin: { type: "text" },
         padding: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -20,12 +22,16 @@ export const DividerBlock = {
         style: "solid",
         margin: "0px",
         padding: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <hr
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     border: "none",
                     borderTop: `${props.thickness} ${props.style} ${props.color}`,
                     margin: props.margin ?? "0px",

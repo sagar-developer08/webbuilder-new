@@ -17,10 +17,6 @@ export const DoughnutChartBlock = {
         centerText: { type: "text" },
         height: { type: "text" },
         padding: { type: "text" },
-        margin: { type: "text" },
-        borderRadius: { type: "text" },
-        boxShadow: { type: "text" },
-        background: { type: "text" },
     },
 
     defaultProps: {
@@ -31,10 +27,6 @@ export const DoughnutChartBlock = {
         centerText: "45%",
         height: "300px",
         padding: "20px",
-        margin: "0px",
-        borderRadius: "12px",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-        background: "#fff",
     },
 
     render: (props: any) => {
@@ -75,11 +67,10 @@ export const DoughnutChartBlock = {
             <div
                 className="pb-chart"
                 style={{
-                    background: props.background ?? "#fff",
-                    borderRadius: props.borderRadius ?? "12px",
+                    background: "#fff",
+                    borderRadius: "12px",
                     padding: props.padding,
-                    margin: props.margin ?? "0px",
-                    boxShadow: props.boxShadow ?? "0 1px 3px rgba(0,0,0,0.08)",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                     height: props.height,
                     position: "relative",
                 }}

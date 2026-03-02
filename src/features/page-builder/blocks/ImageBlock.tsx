@@ -10,7 +10,6 @@ export const ImageBlock = {
             step: 5,
         },
         borderRadius: { type: "text" },
-        margin: { type: "text" },
     },
 
     defaultProps: {
@@ -18,7 +17,6 @@ export const ImageBlock = {
         padding: "0px",
         width: 100,
         borderRadius: "8px",
-        margin: "0px",
     },
 
     render: (props: any) => {
@@ -33,7 +31,6 @@ export const ImageBlock = {
                     height: "auto",
                     display: "block",
                     padding: props.padding,
-                    margin: props.margin ?? "0px",
                     borderRadius: props.borderRadius,
                 }}
                 alt=""

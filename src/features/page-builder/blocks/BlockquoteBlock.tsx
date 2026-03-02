@@ -8,6 +8,8 @@ export const BlockquoteBlock = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         backgroundColor: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -19,12 +21,16 @@ export const BlockquoteBlock = {
         margin: "0px",
         borderRadius: "0 8px 8px 0",
         backgroundColor: "#f8fafc",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <blockquote
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     borderLeft: `4px solid ${props.borderColor}`,
                     padding: props.padding,
                     margin: props.margin ?? "0px",

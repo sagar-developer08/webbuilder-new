@@ -27,7 +27,6 @@ export const MarqueeBlock = {
             ],
         },
         padding: { type: "text" },
-        margin: { type: "text" },
     },
 
     defaultProps: {
@@ -39,7 +38,6 @@ export const MarqueeBlock = {
         fontSize: "18px",
         pauseOnHover: "yes",
         padding: "12px 0",
-        margin: "0px",
     },
 
     render: (props: any) => {
@@ -68,7 +66,6 @@ export const MarqueeBlock = {
                     whiteSpace: "nowrap",
                     width: "100%",
                     padding: props.padding,
-                    margin: props.margin ?? "0px",
                 }}
             >
                 <style>{keyframesCSS}</style>

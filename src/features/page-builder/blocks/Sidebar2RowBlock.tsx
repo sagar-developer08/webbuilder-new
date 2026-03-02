@@ -28,6 +28,8 @@ export const Sidebar2RowBlock = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -38,6 +40,8 @@ export const Sidebar2RowBlock = {
         margin: "0px",
         borderRadius: "4px",
         background: "#a855f7",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -55,6 +59,8 @@ export const Sidebar2RowBlock = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexWrap: "wrap",
                     gap,
@@ -104,12 +110,12 @@ export const Sidebar2RowBlock = {
                 >
                     <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                         <Top />
-                    </div>
+                        </div>
                     <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                         <Bottom />
-                    </div>
-                </div>
-            </div>
-        );
+                        </div>
+                        </div>
+                        </div>
+                        );
     },
 };

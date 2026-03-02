@@ -26,6 +26,8 @@ export const TwoColFooterBlock = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -34,6 +36,8 @@ export const TwoColFooterBlock = {
         margin: "0px",
         borderRadius: "4px",
         background: "#f97316",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -42,6 +46,8 @@ export const TwoColFooterBlock = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexDirection: "column",
                     gap,
@@ -99,8 +105,8 @@ export const TwoColFooterBlock = {
                 {/* Full-width footer row */}
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <Footer />
-                </div>
-            </div>
-        );
+                    </div>
+                    </div>
+                    );
     },
 };

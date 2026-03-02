@@ -10,6 +10,8 @@ export const CheckboxBlock = {
             ],
         },
         margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -17,12 +19,16 @@ export const CheckboxBlock = {
         padding: "0px",
         checked: "false",
         margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <label
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     alignItems: "center",
                     gap: "8px",

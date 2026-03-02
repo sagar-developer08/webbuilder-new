@@ -1,0 +1,312 @@
+/* ==========================================================================
+   Web Builder – Animation System
+   CSS keyframes, entrance classes, hover classes, loop classes
+   Prefix: wb- (web builder)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Entrance / On-Appear Keyframes
+   -------------------------------------------------------------------------- */
+
+/* ── Fade ── */
+@keyframes wb-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes wb-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes wb-fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes wb-fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes wb-fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── Zoom ── */
+@keyframes wb-zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes wb-zoomOut {
+  from {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ── Slide ── */
+@keyframes wb-slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes wb-slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes wb-slideLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes wb-slideRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ── Special ── */
+@keyframes wb-bounce {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+  70% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes wb-spin {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+@keyframes wb-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Entrance Animation Classes  (applied when element becomes visible)
+   -------------------------------------------------------------------------- */
+.wb-entrance {
+  animation-fill-mode: both;
+}
+
+.wb-entrance-fadeIn {
+  animation-name: wb-fadeIn;
+}
+.wb-entrance-fadeInUp {
+  animation-name: wb-fadeInUp;
+}
+.wb-entrance-fadeInDown {
+  animation-name: wb-fadeInDown;
+}
+.wb-entrance-fadeInLeft {
+  animation-name: wb-fadeInLeft;
+}
+.wb-entrance-fadeInRight {
+  animation-name: wb-fadeInRight;
+}
+.wb-entrance-zoomIn {
+  animation-name: wb-zoomIn;
+}
+.wb-entrance-zoomOut {
+  animation-name: wb-zoomOut;
+}
+.wb-entrance-slideUp {
+  animation-name: wb-slideUp;
+}
+.wb-entrance-slideDown {
+  animation-name: wb-slideDown;
+}
+.wb-entrance-slideLeft {
+  animation-name: wb-slideLeft;
+}
+.wb-entrance-slideRight {
+  animation-name: wb-slideRight;
+}
+.wb-entrance-bounce {
+  animation-name: wb-bounce;
+}
+.wb-entrance-spin {
+  animation-name: wb-spin;
+}
+.wb-entrance-reveal {
+  animation-name: wb-reveal;
+}
+
+/* --------------------------------------------------------------------------
+   3. Hover Animation Classes
+   -------------------------------------------------------------------------- */
+
+/* Lift / translate up */
+.wb-hover-lift {
+  transition: transform var(--wb-duration, 300ms) var(--wb-easing, ease);
+}
+.wb-hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+/* Shadow expand */
+.wb-hover-shadowExpand {
+  transition: box-shadow var(--wb-duration, 300ms) var(--wb-easing, ease);
+}
+.wb-hover-shadowExpand:hover {
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.18),
+    0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Image inner zoom: container clips, child scales */
+.wb-hover-imageInnerZoom {
+  overflow: hidden;
+}
+.wb-hover-imageInnerZoom > * {
+  transition: transform var(--wb-duration, 300ms) var(--wb-easing, ease);
+}
+.wb-hover-imageInnerZoom:hover > * {
+  transform: scale(1.05);
+}
+
+/* 3D Tilt – CSS-only subtle version (JS handles full tilt) */
+.wb-hover-tilt3d {
+  transition: transform var(--wb-duration, 300ms) var(--wb-easing, ease);
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Loop Keyframes & Classes
+   -------------------------------------------------------------------------- */
+@keyframes wb-bobbing {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes wb-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+@keyframes wb-spinLoop {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.wb-loop {
+  animation-iteration-count: infinite;
+}
+
+.wb-loop-bobbing {
+  animation-name: wb-bobbing;
+}
+.wb-loop-pulse {
+  animation-name: wb-pulse;
+}
+.wb-loop-spin {
+  animation-name: wb-spinLoop;
+}
+
+/* --------------------------------------------------------------------------
+   5. Utility – hidden before entrance animation fires
+   -------------------------------------------------------------------------- */
+.wb-anim-hidden {
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------------
+   6. Editor-mode animation badge
+   -------------------------------------------------------------------------- */
+.wb-anim-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(99, 102, 241, 0.85);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 10;
+  line-height: 1.4;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}

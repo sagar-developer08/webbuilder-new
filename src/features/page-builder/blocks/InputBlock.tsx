@@ -17,6 +17,8 @@ export const InputBlock = {
         padding: { type: "text" },
         margin: { type: "text" },
         borderRadius: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -26,11 +28,15 @@ export const InputBlock = {
         padding: "0px",
         margin: "0px",
         borderRadius: "6px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
-            <div style={{ marginBottom: "16px", padding: props.padding }}>
+            <div style={{ width: props.width !== "auto" ? props.width : undefined,
+                height: props.height !== "auto" ? props.height : undefined,
+                marginBottom: "16px", padding: props.padding }}>
                 {props.label && (
                     <label
                         style={{

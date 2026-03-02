@@ -33,6 +33,8 @@ export const Layout4Block = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -41,6 +43,8 @@ export const Layout4Block = {
         margin: "0px",
         borderRadius: "4px",
         background: "#6366f1",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -49,6 +53,8 @@ export const Layout4Block = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexDirection: "column",
                     gap,
@@ -78,23 +84,23 @@ export const Layout4Block = {
                 {/* Full-width top */}
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <Top />
-                </div>
+                    </div>
 
-                {/* 2 columns middle */}
+                    {/* 2 columns middle */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap }}>
                     <div style={{ flex: "1 1 300px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                         <Left />
-                    </div>
+                        </div>
                     <div style={{ flex: "1 1 300px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                         <Right />
-                    </div>
-                </div>
+                        </div>
+                        </div>
 
-                {/* Full-width bottom */}
+                        {/* Full-width bottom */}
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <Bottom />
-                </div>
-            </div>
-        );
+                    </div>
+                    </div>
+                    );
     },
 };

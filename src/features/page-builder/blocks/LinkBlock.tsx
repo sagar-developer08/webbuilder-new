@@ -13,6 +13,8 @@ export const LinkBlock = {
             ],
         },
         margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -23,6 +25,8 @@ export const LinkBlock = {
         padding: "0px",
         underline: "underline",
         margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -38,6 +42,8 @@ export const LinkBlock = {
                 target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     color: props.color,
                     fontSize: props.fontSize,
                     padding: props.padding,

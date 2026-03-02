@@ -6,6 +6,8 @@ export const IconBlock = {
         padding: { type: "text" },
         href: { type: "text" },
         margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -15,6 +17,8 @@ export const IconBlock = {
         padding: "0px",
         href: "",
         margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -45,11 +49,13 @@ export const IconBlock = {
                     href={props.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ display: "inline-flex", textDecoration: "none" }}
-                >
-                    {iconContent}
-                </a>
-            );
+                    style={{ width: props.width !== "auto" ? props.width : undefined,
+                        height: props.height !== "auto" ? props.height : undefined,
+                        display: "inline-flex", textDecoration: "none" }}
+                        >
+                        {iconContent}
+                        </a>
+                        );
         }
 
         return iconContent;

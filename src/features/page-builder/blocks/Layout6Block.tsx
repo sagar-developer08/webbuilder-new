@@ -33,6 +33,8 @@ export const Layout6Block = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -41,6 +43,8 @@ export const Layout6Block = {
         margin: "0px",
         borderRadius: "4px",
         background: "#6366f1",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -49,6 +53,8 @@ export const Layout6Block = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexWrap: "wrap",
                     gap,
@@ -77,17 +83,17 @@ export const Layout6Block = {
 
                 <div style={{ flex: "1 1 150px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                     <Col1 />
-                </div>
+                    </div>
                 <div style={{ flex: "1 1 150px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                     <Col2 />
-                </div>
+                    </div>
                 <div style={{ flex: "1 1 150px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                     <Col3 />
-                </div>
+                    </div>
                 <div style={{ flex: "1 1 150px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                     <Col4 />
-                </div>
-            </div>
-        );
+                    </div>
+                    </div>
+                    );
     },
 };

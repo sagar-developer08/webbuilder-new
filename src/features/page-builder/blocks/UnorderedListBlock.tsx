@@ -5,6 +5,8 @@ export const UnorderedListBlock = {
         color: { type: "text" },
         padding: { type: "text" },
         margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -13,6 +15,8 @@ export const UnorderedListBlock = {
         color: "#374151",
         padding: "0px",
         margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -24,6 +28,8 @@ export const UnorderedListBlock = {
         return (
             <ul
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     fontSize: props.fontSize,
                     color: props.color,
                     padding: props.padding,

@@ -25,6 +25,8 @@ export const Layout7Block = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -33,6 +35,8 @@ export const Layout7Block = {
         margin: "0px",
         borderRadius: "4px",
         background: "#6366f1",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -41,6 +45,8 @@ export const Layout7Block = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexWrap: "wrap",
                     gap,

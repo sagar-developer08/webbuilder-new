@@ -5,6 +5,8 @@ export const RadioBlock = {
         value: { type: "text" },
         padding: { type: "text" },
         margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -13,12 +15,16 @@ export const RadioBlock = {
         value: "option1",
         padding: "0px",
         margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <label
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     alignItems: "center",
                     gap: "8px",

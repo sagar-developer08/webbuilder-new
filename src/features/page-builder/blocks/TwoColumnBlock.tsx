@@ -1,5 +1,4 @@
 import "./blocks-responsive.css";
-
 const ALLOWED_CHILDREN = [
     "Section", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6",
     "Paragraph", "Span", "Button", "Image", "Video", "Audio", "Marquee",
@@ -28,6 +27,8 @@ export const TwoColumnBlock = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -36,6 +37,8 @@ export const TwoColumnBlock = {
         margin: "0px",
         borderRadius: "4px",
         background: "#f59e0b",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -45,6 +48,8 @@ export const TwoColumnBlock = {
             <div
                 className="pb-two-col"
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexWrap: "wrap",
                     gap,

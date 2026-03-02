@@ -6,6 +6,8 @@ export const ButtonBlock = {
         color: { type: "text" },
         padding: { type: "text" },
         margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -15,6 +17,8 @@ export const ButtonBlock = {
         color: "#ffffff",
         padding: "12px 24px",
         margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -22,6 +26,8 @@ export const ButtonBlock = {
             <a href={props.link}>
                 <button
                     style={{
+                        width: props.width !== "auto" ? props.width : undefined,
+                        height: props.height !== "auto" ? props.height : undefined,
                         backgroundColor: props.backgroundColor,
                         color: props.color,
                         padding: props.padding,

@@ -33,6 +33,8 @@ export const Layout1Block = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -41,6 +43,8 @@ export const Layout1Block = {
         margin: "0px",
         borderRadius: "4px",
         background: "#6366f1",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -49,6 +53,8 @@ export const Layout1Block = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexDirection: "column",
                     gap,
@@ -78,21 +84,21 @@ export const Layout1Block = {
                 {/* Full-width hero */}
                 <div style={{ minHeight: isEdit ? "80px" : undefined }}>
                     <Hero />
-                </div>
+                    </div>
 
-                {/* 3 columns below */}
+                    {/* 3 columns below */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap }}>
                     <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                         <Col1 />
-                    </div>
+                        </div>
                     <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                         <Col2 />
-                    </div>
+                        </div>
                     <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                         <Col3 />
-                    </div>
-                </div>
-            </div>
-        );
+                        </div>
+                        </div>
+                        </div>
+                        );
     },
 };

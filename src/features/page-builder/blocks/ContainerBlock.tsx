@@ -20,6 +20,8 @@ export const ContainerBlock = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -28,6 +30,8 @@ export const ContainerBlock = {
         margin: "0 auto",
         borderRadius: "4px",
         background: "#10b981",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -36,6 +40,8 @@ export const ContainerBlock = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     maxWidth,
                     margin: props.margin ?? "0 auto",
                     border: isEdit ? "2px dashed #10b981" : "none",

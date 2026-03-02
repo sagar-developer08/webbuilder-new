@@ -12,6 +12,8 @@ export const Heading3Block = {
             ],
         },
         margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -20,12 +22,16 @@ export const Heading3Block = {
         padding: "0px",
         textAlign: "left",
         margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <h3
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     fontSize: "1.75rem",
                     fontWeight: 600,
                     color: props.color,

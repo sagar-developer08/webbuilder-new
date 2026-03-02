@@ -13,6 +13,8 @@ export const SubmitButtonBlock = {
         },
         margin: { type: "text" },
         borderRadius: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -23,6 +25,8 @@ export const SubmitButtonBlock = {
         fullWidth: "false",
         margin: "0px",
         borderRadius: "6px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -30,6 +34,8 @@ export const SubmitButtonBlock = {
             <button
                 type="submit"
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     backgroundColor: props.backgroundColor,
                     color: props.color,
                     padding: props.padding,

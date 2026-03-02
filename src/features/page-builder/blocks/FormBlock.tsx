@@ -8,6 +8,8 @@ export const FormBlock = {
         },
         margin: { type: "text" },
         borderRadius: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -15,6 +17,8 @@ export const FormBlock = {
         padding: "24px",
         margin: "0px",
         borderRadius: "8px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -24,6 +28,8 @@ export const FormBlock = {
             <form
                 onSubmit={(e) => e.preventDefault()}
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     backgroundColor,
                     padding,
                     borderRadius: props.borderRadius ?? "8px",

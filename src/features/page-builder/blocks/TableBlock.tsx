@@ -6,6 +6,8 @@ export const TableBlock = {
         margin: { type: "text" },
         backgroundColor: { type: "text" },
         textAlign: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -15,6 +17,8 @@ export const TableBlock = {
         margin: "0px",
         backgroundColor: "#f1f5f9",
         textAlign: "left",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -33,7 +37,9 @@ export const TableBlock = {
             .filter((row: string[]) => row.some((cell) => cell.length > 0));
 
         return (
-            <div style={{ overflowX: "auto", margin: props.margin ?? "0px", padding: props.padding }}>
+            <div style={{ width: props.width !== "auto" ? props.width : undefined,
+                height: props.height !== "auto" ? props.height : undefined,
+                overflowX: "auto", margin: props.margin ?? "0px", padding: props.padding }}>
                 <table
                     style={{
                         width: "100%",

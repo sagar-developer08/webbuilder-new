@@ -15,6 +15,8 @@ export const SpanBlock = {
         backgroundColor: { type: "text" },
         margin: { type: "text" },
         borderRadius: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -26,12 +28,16 @@ export const SpanBlock = {
         backgroundColor: "transparent",
         margin: "0px",
         borderRadius: undefined,
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <span
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     fontSize: props.fontSize,
                     color: props.color,
                     fontWeight: props.fontWeight,

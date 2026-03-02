@@ -41,7 +41,6 @@ export const SelectBlock = {
                     </label>
                 )}
                 <select
-                    aria-label={props.label || props.placeholder || "Select"}
                     style={{
                         width: "100%",
                         padding: "10px 12px",

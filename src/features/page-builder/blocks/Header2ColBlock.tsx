@@ -26,6 +26,8 @@ export const Header2ColBlock = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -34,6 +36,8 @@ export const Header2ColBlock = {
         margin: "0px",
         borderRadius: "4px",
         background: "#ec4899",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -42,6 +46,8 @@ export const Header2ColBlock = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexDirection: "column",
                     gap,
@@ -71,10 +77,10 @@ export const Header2ColBlock = {
                 {/* Full-width header row */}
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <Header />
-                </div>
+                    </div>
 
-                {/* Two columns below */}
-                <div
+                    {/* Two columns below */}
+                    <div
                     style={{
                         display: "flex",
                         flexWrap: "wrap",

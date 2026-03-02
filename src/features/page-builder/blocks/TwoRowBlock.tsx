@@ -22,6 +22,8 @@ export const TwoRowBlock = {
         margin: { type: "text" },
         borderRadius: { type: "text" },
         background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -30,6 +32,8 @@ export const TwoRowBlock = {
         margin: "0px",
         borderRadius: "4px",
         background: "#06b6d4",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -38,6 +42,8 @@ export const TwoRowBlock = {
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexDirection: "column",
                     gap,
@@ -66,11 +72,11 @@ export const TwoRowBlock = {
 
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <Top />
-                </div>
+                    </div>
                 <div style={{ minHeight: isEdit ? "60px" : undefined }}>
                     <Bottom />
-                </div>
-            </div>
-        );
+                    </div>
+                    </div>
+                    );
     },
 };

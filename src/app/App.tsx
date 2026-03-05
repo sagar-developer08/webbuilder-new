@@ -6,6 +6,7 @@ import { config as appConfig } from "@/config";
 import { useEffect } from 'react';
 import { useAuth } from '@/features/auth/AuthContext';
 import AuthModal from '@/features/auth/components/AuthModal';
+import DataManager from '@/features/data-manager/DataManager';
 
 /**
  * Root App Component
@@ -19,7 +20,7 @@ function App() {
   const [pageData, setPageData] = useState<any>({ content: [] });
   const [allPages, setAllPages] = useState<SubPage[]>([]);
   const [rootData, setRootData] = useState<any>(null);
-  const [mode, setMode] = useState<"pick" | "edit" | "view">("pick");
+  const [mode, setMode] = useState<"pick" | "edit" | "view" | "data">("pick");
   const [sites, setSites] = useState<any[]>([]);
   const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
 
@@ -86,6 +87,12 @@ function App() {
       >
         <div style={{ width: "100%", maxWidth: "1000px", display: "flex", justifyContent: "flex-end", marginBottom: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "#fff", padding: "8px 16px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+            <button
+              onClick={() => setMode("data")}
+              style={{ background: "#f0f9ff", border: "1px solid #bae6fd", color: "#0369a1", fontSize: "13px", cursor: "pointer", padding: "5px 12px", borderRadius: "6px", fontWeight: 500, display: "flex", alignItems: "center", gap: "4px" }}
+            >
+              ⚡ Data Manager
+            </button>
             <span style={{ fontSize: "14px", fontWeight: 500, color: "#334155" }}>{user.name || user.email}</span>
             <button
               onClick={logout}
@@ -286,6 +293,11 @@ function App() {
         </div>
       </div>
     );
+  }
+
+  // ----- Data Manager mode -----
+  if (mode === "data") {
+    return <DataManager onBack={() => setMode("pick")} />;
   }
 
   // ----- Editor mode -----

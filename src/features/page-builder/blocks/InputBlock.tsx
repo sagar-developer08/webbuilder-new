@@ -13,6 +13,7 @@ export const InputBlock = {
             ],
         },
         placeholder: { type: "text" },
+        name: { type: "text", label: "Field Name (API key)" },
         label: { type: "text" },
         padding: { type: "text" },
         margin: { type: "text" },
@@ -24,6 +25,7 @@ export const InputBlock = {
     defaultProps: {
         inputType: "text",
         placeholder: "Enter text...",
+        name: "",
         label: "",
         padding: "0px",
         margin: "0px",
@@ -34,9 +36,11 @@ export const InputBlock = {
 
     render: (props: any) => {
         return (
-            <div style={{ width: props.width !== "auto" ? props.width : undefined,
+            <div style={{
+                width: props.width !== "auto" ? props.width : undefined,
                 height: props.height !== "auto" ? props.height : undefined,
-                marginBottom: "16px", padding: props.padding }}>
+                marginBottom: "16px", padding: props.padding
+            }}>
                 {props.label && (
                     <label
                         style={{
@@ -52,6 +56,7 @@ export const InputBlock = {
                 )}
                 <input
                     type={props.inputType}
+                    name={props.name || undefined}
                     placeholder={props.placeholder}
                     style={{
                         width: "100%",

@@ -76,6 +76,10 @@ import { BarChartBlock } from "../blocks/BarChartBlock";
 import { DoughnutChartBlock } from "../blocks/DoughnutChartBlock";
 import { AreaChartBlock } from "../blocks/AreaChartBlock";
 
+// Dynamic data blocks
+import { DynamicTableBlock } from "../blocks/DynamicTableBlock";
+import { DynamicChartBlock } from "../blocks/DynamicChartBlock";
+
 export const config: Config = {
   components: {
     // Layout
@@ -151,6 +155,10 @@ export const config: Config = {
     BarChart: withAnimation(withResize(BarChartBlock)),
     DoughnutChart: withAnimation(withResize(DoughnutChartBlock)),
     AreaChart: withAnimation(withResize(AreaChartBlock)),
+
+    // Dynamic
+    DynamicTable: withAnimation(withResize(DynamicTableBlock)),
+    DynamicChart: withAnimation(withResize(DynamicChartBlock)),
   },
   categories: {
     Layout: {
@@ -182,6 +190,9 @@ export const config: Config = {
     },
     Charts: {
       components: ["BarChart", "DoughnutChart", "AreaChart"],
+    },
+    Dynamic: {
+      components: ["DynamicTable", "DynamicChart"],
     },
   },
 };

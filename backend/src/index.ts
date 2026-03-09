@@ -10,7 +10,9 @@ import { savedApiRoutes } from './routes/savedApi.js'
 import { connectionRoutes } from './routes/connections.js'
 import { errorHandler } from './middleware/errorHandler.js'
 import { requestLogger } from './middleware/requestLogger.js'
+import dns from 'dns'
 
+dns.setServers(['8.8.8.8', '8.8.4.4'])
 const app = express()
 const PORT = process.env.PORT || 3001
 

@@ -17,11 +17,17 @@ export default function DataManager({ onBack }: DataManagerProps) {
     const [connLoading, setConnLoading] = useState(false);
     const [testResult, setTestResult] = useState<{ id: string; ok: boolean } | null>(null);
 
-    // ── Saved API state ──
+    // ── Saved API Form state & options ──
     const [apis, setApis] = useState<SavedApiItem[]>([]);
     const [showApiForm, setShowApiForm] = useState(false);
     const [apiForm, setApiForm] = useState({ apiName: "", method: "POST", connectionId: "", dbName: "", collectionName: "", columns: "", description: "" });
     const [apiLoading, setApiLoading] = useState(false);
+    
+    // Dynamic Dropdown states
+    const [dbOptions, setDbOptions] = useState<string[]>([]);
+    const [collectionOptions, setCollectionOptions] = useState<string[]>([]);
+    const [columnOptions, setColumnOptions] = useState<string[]>([]);
+    const [selectedColumns, setSelectedColumns] = useState<Set<string>>(new Set());
 
     const token = localStorage.getItem("framely_token");
 
@@ -101,11 +107,12 @@ export default function DataManager({ onBack }: DataManagerProps) {
                 connectionId: apiForm.connectionId,
                 dbName: apiForm.dbName,
                 collectionName: apiForm.collectionName,
-                columns: apiForm.columns ? apiForm.columns.split(",").map((c) => c.trim()) : [],
+                columns: Array.from(selectedColumns),
                 description: apiForm.description || undefined,
             });
             setShowApiForm(false);
             setApiForm({ apiName: "", method: "POST", connectionId: "", dbName: "", collectionName: "", columns: "", description: "" });
+            setSelectedColumns(new Set());
             loadApis();
         } catch (e: any) {
             alert("Failed: " + (e.message || "Unknown error"));
@@ -113,6 +120,40 @@ export default function DataManager({ onBack }: DataManagerProps) {
             setApiLoading(false);
         }
     }
+
+    // ── Fetch form metadata dynamically ──
+    useEffect(() => {
+        if (apiForm.connectionId) {
+            connectionService.getDatabases(apiForm.connectionId).then(setDbOptions).catch(() => setDbOptions([]));
+        } else {
+            setDbOptions([]);
+            setCollectionOptions([]);
+            setColumnOptions([]);
+        }
+    }, [apiForm.connectionId]);
+
+    useEffect(() => {
+        if (apiForm.connectionId && apiForm.dbName) {
+            connectionService.getCollections(apiForm.connectionId, apiForm.dbName).then(setCollectionOptions).catch(() => setCollectionOptions([]));
+        } else {
+            setCollectionOptions([]);
+            setColumnOptions([]);
+        }
+    }, [apiForm.dbName]);
+
+    useEffect(() => {
+        if (apiForm.connectionId && apiForm.dbName && apiForm.collectionName) {
+            connectionService.getColumns(apiForm.connectionId, apiForm.dbName, apiForm.collectionName)
+                .then(cols => {
+                    setColumnOptions(cols);
+                    setSelectedColumns(new Set(cols));
+                })
+                .catch(() => setColumnOptions([]));
+        } else {
+            setColumnOptions([]);
+            setSelectedColumns(new Set());
+        }
+    }, [apiForm.collectionName]);
 
     // ── Delete saved API ──
     async function handleDeleteApi(id: string) {
@@ -376,16 +417,97 @@ export default function DataManager({ onBack }: DataManagerProps) {
                         <div style={{ display: "flex", gap: "12px" }}>
                             <div style={{ ...s.inputGroup, flex: 1 }}>
                                 <label style={s.inputLabel}>Database Name *</label>
-                                <input style={s.input} placeholder="my_database" value={apiForm.dbName} onChange={(e) => setApiForm({ ...apiForm, dbName: e.target.value })} />
+                                <input 
+                                    style={s.input} 
+                                    placeholder="Enter or select database..." 
+                                    value={apiForm.dbName} 
+                                    onChange={(e) => setApiForm({ ...apiForm, dbName: e.target.value })} 
+                                    list="db-options" 
+                                />
+                                <datalist id="db-options">
+                                    {dbOptions.map((db, idx) => <option key={idx} value={db} />)}
+                                </datalist>
                             </div>
                             <div style={{ ...s.inputGroup, flex: 1 }}>
                                 <label style={s.inputLabel}>Collection Name *</label>
-                                <input style={s.input} placeholder="contacts" value={apiForm.collectionName} onChange={(e) => setApiForm({ ...apiForm, collectionName: e.target.value })} />
+                                <input 
+                                    style={s.input} 
+                                    placeholder="Enter or select collection..." 
+                                    value={apiForm.collectionName} 
+                                    onChange={(e) => setApiForm({ ...apiForm, collectionName: e.target.value })} 
+                                    list="col-options" 
+                                />
+                                <datalist id="col-options">
+                                    {collectionOptions.map((col, idx) => <option key={idx} value={col} />)}
+                                </datalist>
                             </div>
                         </div>
                         <div style={s.inputGroup}>
-                            <label style={s.inputLabel}>Columns (comma-separated, for GET projections)</label>
-                            <input style={s.input} placeholder="name, email, message, createdAt" value={apiForm.columns} onChange={(e) => setApiForm({ ...apiForm, columns: e.target.value })} />
+                            <label style={s.inputLabel}>Select Columns (Detected & Custom)</label>
+                            
+                            {columnOptions.length > 0 && (
+                                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "8px", padding: "8px", background: "#f8fafc", borderRadius: "6px", border: "1px solid #e2e8f0" }}>
+                                    {columnOptions.map((col) => (
+                                        <label key={col} style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", color: "#334155", cursor: "pointer" }}>
+                                            <input 
+                                                type="checkbox" 
+                                                checked={selectedColumns.has(col)}
+                                                onChange={(e) => {
+                                                    const newSet = new Set(selectedColumns);
+                                                    if (e.target.checked) newSet.add(col);
+                                                    else newSet.delete(col);
+                                                    setSelectedColumns(newSet);
+                                                }}
+                                            />
+                                            {col}
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+
+                            <input 
+                                style={{...s.input, marginTop: "4px"}} 
+                                placeholder="Add custom columns (comma-separated)..." 
+                                onChange={(e) => {
+                                    if (e.target.value.includes(",")) {
+                                        const parts = e.target.value.split(",");
+                                        const active = parts.pop() || "";
+                                        const newSet = new Set(selectedColumns);
+                                        parts.forEach(p => {
+                                            const cleaned = p.trim();
+                                            if (cleaned) newSet.add(cleaned);
+                                        });
+                                        setSelectedColumns(newSet);
+                                        e.target.value = active; // keep last part being typed
+                                    }
+                                }} 
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && e.currentTarget.value.trim()) {
+                                        const val = e.currentTarget.value.trim();
+                                        if (val) {
+                                            const newSet = new Set(selectedColumns);
+                                            newSet.add(val);
+                                            setSelectedColumns(newSet);
+                                        }
+                                        e.currentTarget.value = "";
+                                        e.preventDefault();
+                                    }
+                                }}
+                            />
+                            
+                            {/* Render manually typed columns that are not in the predefined list */}
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+                                {Array.from(selectedColumns).filter(c => !columnOptions.includes(c)).map(col => (
+                                    <div key={col} style={{ background: "#e2e8f0", padding: "2px 8px", borderRadius: "12px", fontSize: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
+                                        {col}
+                                        <span style={{ cursor: "pointer", color: "#64748b" }} onClick={() => {
+                                            const newSet = new Set(selectedColumns);
+                                            newSet.delete(col);
+                                            setSelectedColumns(newSet);
+                                        }}>×</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                         <div style={s.inputGroup}>
                             <label style={s.inputLabel}>Description</label>

@@ -23,7 +23,10 @@ function tryObjectId(val: any) {
   return val
 }
 
-async function getMongoConfig(connectionId: string, userId: string): Promise<MongoConnectionConfig | null> {
+async function getMongoConfig(
+  connectionId: string,
+  userId: string
+): Promise<MongoConnectionConfig | null> {
   const conn = await prisma.connection.findFirst({
     where: { id: connectionId, userId },
   })
@@ -46,12 +49,20 @@ async function getMongoConfig(connectionId: string, userId: string): Promise<Mon
 router.post('/', async (req: Request, res: Response) => {
   try {
     const {
-      apiName, columns = [], method = 'GET', dbName, collectionName,
-      description, payloadSample, connectionId, meta,
+      apiName,
+      columns = [],
+      method = 'GET',
+      dbName,
+      collectionName,
+      description,
+      payloadSample,
+      connectionId,
+      meta,
     } = req.body
 
     if (!apiName) return res.status(400).json({ success: false, msg: 'apiName is required' })
-    if (!connectionId) return res.status(400).json({ success: false, msg: 'connectionId is required' })
+    if (!connectionId)
+      return res.status(400).json({ success: false, msg: 'connectionId is required' })
 
     const savedApi = await prisma.savedApi.create({
       data: {
@@ -103,7 +114,17 @@ router.put('/:id', async (req: Request, res: Response) => {
     })
     if (!existing) return res.status(404).json({ success: false, msg: 'Not found' })
 
-    const { apiName, columns, method, dbName, collectionName, description, payloadSample, connectionId, meta } = req.body
+    const {
+      apiName,
+      columns,
+      method,
+      dbName,
+      collectionName,
+      description,
+      payloadSample,
+      connectionId,
+      meta,
+    } = req.body
 
     const updated = await prisma.savedApi.update({
       where: { id: req.params.id },
@@ -170,10 +191,12 @@ router.post('/:id/execute', async (req: Request, res: Response) => {
     // ── GET ──
     if (method === 'GET' || method === 'FETCH') {
       const joins = meta.joins
-      const filter = payload.filter || {}
-      const sort = payload.sort || { _id: -1 }
-      const limit = payload.limit || 100
-      const skip = payload.skip || 0
+      const isArr = Array.isArray(payload)
+      const filter = isArr ? {} : payload.filter || {}
+      const sort =
+        isArr || !payload.sort || typeof payload.sort !== 'object' ? { _id: -1 } : payload.sort
+      const limit = isArr ? 100 : payload.limit || 100
+      const skip = isArr ? 0 : payload.skip || 0
 
       if (Array.isArray(joins) && joins.length > 0) {
         // Aggregation pipeline with joins
@@ -202,7 +225,9 @@ router.post('/:id/execute', async (req: Request, res: Response) => {
 
         if (api.columns && api.columns.length > 0) {
           const projection: any = {}
-          api.columns.forEach((col) => { projection[col] = 1 })
+          api.columns.forEach(col => {
+            projection[col] = 1
+          })
           pipeline.push({ $project: projection })
         }
 
@@ -214,7 +239,9 @@ router.post('/:id/execute', async (req: Request, res: Response) => {
         // Simple find
         let projection: any = {}
         if (api.columns && api.columns.length > 0) {
-          api.columns.forEach((col) => { projection[col] = 1 })
+          api.columns.forEach(col => {
+            projection[col] = 1
+          })
         }
 
         const docs = await collection
@@ -249,7 +276,8 @@ router.post('/:id/execute', async (req: Request, res: Response) => {
       const inserted = await collection.find({ _id: { $in: insertedIds } }).toArray()
 
       return res.status(201).json({
-        success: true, method,
+        success: true,
+        method,
         insertedCount: insertRes.insertedCount,
         data: inserted,
       })
@@ -257,14 +285,42 @@ router.post('/:id/execute', async (req: Request, res: Response) => {
 
     // ── PUT ──
     if (method === 'PUT') {
-      const incoming = Array.isArray(payload) ? payload : [payload]
+      const isArrPayload = Array.isArray(payload)
+      const isFetch = !isArrPayload && (payload.action === 'fetch' || req.query.action === 'fetch')
+
+      if (isFetch) {
+        // First works as Get
+        const filter = payload.filter || {}
+        const sort = !payload.sort || typeof payload.sort !== 'object' ? { _id: -1 } : payload.sort
+        const limit = payload.limit || 100
+        const skip = payload.skip || 0
+
+        let projection: any = {}
+        if (api.columns && api.columns.length > 0) {
+          api.columns.forEach(col => {
+            projection[col] = 1
+          })
+        }
+
+        const docs = await collection
+          .find(filter, { projection: Object.keys(projection).length > 0 ? projection : undefined })
+          .sort(sort)
+          .skip(skip)
+          .limit(limit)
+          .toArray()
+
+        return res.json({ success: true, method, count: docs.length, data: docs })
+      }
+
+      const incomingData = payload.data || payload
+      const incoming = Array.isArray(incomingData) ? incomingData : [incomingData]
       if (incoming.length === 0) {
         return res.status(400).json({ success: false, msg: 'Empty payload' })
       }
 
       const matchField = meta.matchField ? String(meta.matchField) : '_id'
       const EXCLUDE = new Set(['_id', 'id', '__v', 'createdAt', 'updatedAt'])
-      const allowedCols = (api.columns || []).filter((c) => !EXCLUDE.has(c) && c !== matchField)
+      const allowedCols = (api.columns || []).filter(c => !EXCLUDE.has(c) && c !== matchField)
 
       if (allowedCols.length === 0) {
         return res.status(400).json({ success: false, msg: 'No editable columns' })
@@ -274,12 +330,15 @@ router.post('/:id/execute', async (req: Request, res: Response) => {
       for (const item of incoming) {
         let matchVal = item[matchField] ?? item._id ?? item.id
         if (matchVal == null || matchVal === '') {
-          return res.status(400).json({ success: false, msg: `Match field "${matchField}" is required` })
+          return res
+            .status(400)
+            .json({ success: false, msg: `Match field "${matchField}" is required` })
         }
 
-        const filter = matchField === '_id'
-          ? { _id: new ObjectId(matchVal) }
-          : { [matchField]: tryObjectId(matchVal) }
+        const filter =
+          matchField === '_id'
+            ? { _id: new ObjectId(matchVal) }
+            : { [matchField]: tryObjectId(matchVal) }
 
         const setFields: any = {}
         for (const col of allowedCols) {
@@ -296,7 +355,7 @@ router.post('/:id/execute', async (req: Request, res: Response) => {
         await collection.updateOne(op.filter, op.update)
       }
 
-      const filters = ops.map((o) => o.filter)
+      const filters = ops.map(o => o.filter)
       const query = filters.length === 1 ? filters[0] : { $or: filters }
       const updatedDocs = await collection.find(query).toArray()
 
@@ -318,9 +377,10 @@ router.post('/:id/execute', async (req: Request, res: Response) => {
         let matchVal = item[matchField] ?? item._id ?? item.id
         if (matchVal == null || matchVal === '') continue
 
-        const filter = matchField === '_id'
-          ? { _id: new ObjectId(matchVal) }
-          : { [matchField]: tryObjectId(matchVal) }
+        const filter =
+          matchField === '_id'
+            ? { _id: new ObjectId(matchVal) }
+            : { [matchField]: tryObjectId(matchVal) }
 
         const docsToDelete = await collection.find(filter).toArray()
         if (docsToDelete.length === 0) continue

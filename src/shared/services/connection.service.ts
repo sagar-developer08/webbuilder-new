@@ -59,6 +59,27 @@ export const connectionService = {
     const json = await res.json();
     return json.connected;
   },
+
+  /** Get databases for connection */
+  getDatabases: async (id: string): Promise<string[]> => {
+    const res = await fetch(`${API_URL}/connections/${id}/databases`, { headers: getHeaders() });
+    const json = await res.json();
+    return json.databases || [];
+  },
+
+  /** Get collections for database */
+  getCollections: async (id: string, dbName: string): Promise<string[]> => {
+    const res = await fetch(`${API_URL}/connections/${id}/databases/${dbName}/collections`, { headers: getHeaders() });
+    const json = await res.json();
+    return json.collections || [];
+  },
+
+  /** Get columns for collection */
+  getColumns: async (id: string, dbName: string, collectionName: string): Promise<string[]> => {
+    const res = await fetch(`${API_URL}/connections/${id}/databases/${dbName}/collections/${collectionName}/columns`, { headers: getHeaders() });
+    const json = await res.json();
+    return json.columns || [];
+  }
 };
 
 export default connectionService;

@@ -106,6 +106,137 @@ router.post('/:id/test', async (req: Request, res: Response) => {
 })
 
 /**
+ * GET /api/connections/:id/databases — List all databases for a connection
+ */
+router.get('/:id/databases', async (req: Request, res: Response) => {
+  try {
+    const connection = await prisma.connection.findFirst({
+      where: { id: req.params.id, userId: req.user.id },
+    })
+
+    if (!connection) {
+      return res.status(404).json({ success: false, msg: 'Connection not found' })
+    }
+
+    const password = connection.encryptedPassword
+      ? decryptPassword(connection.encryptedPassword)
+      : null
+
+    const config = {
+      host: connection.host,
+      port: connection.port,
+      username: connection.username,
+      password,
+      authDb: connection.authDb,
+      connectionString: connection.connectionString,
+      ssl: connection.ssl,
+    }
+
+    const { connectToMongoDB } = await import('../services/mongodb.service.js')
+    const client = await connectToMongoDB(config)
+    
+    // Requires admin privileges in mongo
+    const adminDb = client.db('admin')
+    const result = await adminDb.admin().listDatabases()
+    
+    // Sort logic to match standard usage
+    const dbs = result.databases.map(d => d.name)
+    
+    res.json({ success: true, databases: dbs })
+  } catch (error: any) {
+    res.status(500).json({ success: false, msg: error.message })
+  }
+})
+
+/**
+ * GET /api/connections/:id/databases/:dbName/collections — List all collections for a database
+ */
+router.get('/:id/databases/:dbName/collections', async (req: Request, res: Response) => {
+  try {
+    const connection = await prisma.connection.findFirst({
+      where: { id: req.params.id, userId: req.user.id },
+    })
+
+    if (!connection) {
+      return res.status(404).json({ success: false, msg: 'Connection not found' })
+    }
+
+    const password = connection.encryptedPassword
+      ? decryptPassword(connection.encryptedPassword)
+      : null
+
+    const config = {
+      host: connection.host,
+      port: connection.port,
+      username: connection.username,
+      password,
+      authDb: connection.authDb,
+      connectionString: connection.connectionString,
+      ssl: connection.ssl,
+    }
+
+    const { connectToMongoDB } = await import('../services/mongodb.service.js')
+    const client = await connectToMongoDB(config)
+    
+    const db = client.db(req.params.dbName)
+    const collectionsCursor = await db.listCollections().toArray()
+    const collections = collectionsCursor.map(c => c.name)
+    
+    res.json({ success: true, collections })
+  } catch (error: any) {
+    res.status(500).json({ success: false, msg: error.message })
+  }
+})
+
+/**
+ * GET /api/connections/:id/databases/:dbName/collections/:collectionName/columns — Get sampled columns
+ */
+router.get('/:id/databases/:dbName/collections/:collectionName/columns', async (req: Request, res: Response) => {
+  try {
+    const connection = await prisma.connection.findFirst({
+      where: { id: req.params.id, userId: req.user.id },
+    })
+
+    if (!connection) {
+      return res.status(404).json({ success: false, msg: 'Connection not found' })
+    }
+
+    const password = connection.encryptedPassword
+      ? decryptPassword(connection.encryptedPassword)
+      : null
+
+    const config = {
+      host: connection.host,
+      port: connection.port,
+      username: connection.username,
+      password,
+      authDb: connection.authDb,
+      connectionString: connection.connectionString,
+      ssl: connection.ssl,
+    }
+
+    const { connectToMongoDB } = await import('../services/mongodb.service.js')
+    const client = await connectToMongoDB(config)
+    
+    const db = client.db(req.params.dbName)
+    const collection = db.collection(req.params.collectionName)
+    
+    // Find one document to sample keys
+    const sampleDoc = await collection.findOne({})
+    
+    if (!sampleDoc) {
+      return res.json({ success: true, columns: [] })
+    }
+    
+    const columns = Object.keys(sampleDoc).filter(k => k !== '_id' && k !== '__v')
+    
+    res.json({ success: true, columns })
+  } catch (error: any) {
+    res.status(500).json({ success: false, msg: error.message })
+  }
+})
+
+/**
  * DELETE /api/connections/:id
  */
 router.delete('/:id', async (req: Request, res: Response) => {

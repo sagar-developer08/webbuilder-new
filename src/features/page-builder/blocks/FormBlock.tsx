@@ -9,7 +9,7 @@ export const FormBlock = {
         padding: { type: "text" },
         children: {
             type: "slot",
-            allow: ["Input", "Textarea", "Select", "Checkbox", "Radio", "SubmitButton", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6", "Paragraph", "Span", "Spacer", "Divider"],
+            allow: ["Input", "Textarea", "Select", "Checkbox", "Radio", "SubmitButton", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6", "Paragraph", "Span", "Spacer", "Divider", "DynamicTable"],
         },
         margin: { type: "text" },
         borderRadius: { type: "text" },

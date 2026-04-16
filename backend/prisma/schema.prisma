@@ -1,0 +1,98 @@
+// Prisma schema for Framely - PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  pages       Page[]
+  connections Connection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Page {
+  id           String  @id @default(cuid())
+  title        String
+  previewImage String? @db.Text
+  favicon      String? @db.Text
+  visible      Boolean @default(false)
+  content      String? @db.Text
+  pages        Json? // Array of { id, slug, title, content } for additional pages
+  subdomain    String  @unique
+
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id])
+  @@index([userId])
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  level     String // info | warn | error
+  action    String // e.g. auth_login, sites_create, request
+  message   String   @db.Text
+  meta      String?  @db.Text // JSON: path, method, statusCode, etc.
+  source    String? // backend | frontend
+  createdAt DateTime @default(now())
+
+  @@index([action, createdAt])
+}
+
+model Connection {
+  id              String   @id @default(cuid())
+  name            String
+  type            String   @default("mongodb") // mongodb | postgresql etc.
+  host            String
+  port            Int      @default(27017)
+  username        String?
+  encryptedPassword String? @db.Text
+  authDb          String?  @default("admin")
+  connectionString String? @db.Text // alternative: full URI
+  ssl             Boolean  @default(false)
+
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  savedApis       SavedApi[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model SavedApi {
+  id              String   @id @default(cuid())
+  apiName         String
+  description     String?  @db.Text
+  method          String   @default("GET") // GET | POST | PUT | DELETE
+  dbName          String?
+  collectionName  String?
+  columns         String[] @default([])
+  payloadSample   Json?
+  meta            Json?    // { joins: [...], matchField: "..." }
+
+  connectionId    String
+  connection      Connection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  userId          String
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+}

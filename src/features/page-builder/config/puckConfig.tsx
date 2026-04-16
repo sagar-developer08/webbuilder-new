@@ -1,4 +1,6 @@
 import type { Config } from "@puckeditor/core";
+import { withResize } from "../blocks/withResize";
+import { withAnimation } from "../animations";
 
 // Layout blocks
 import { SectionBlock } from "../blocks/SectionBlock";
@@ -43,6 +45,8 @@ import { EmbedBlock } from "../blocks/EmbedBlock";
 
 // Link blocks
 import { LinkBlock } from "../blocks/LinkBlock";
+import { PageLink } from "../blocks/PageLink";
+import { NavbarBlock } from "../blocks/NavbarBlock";
 
 // Form blocks
 import { FormBlock } from "../blocks/FormBlock";
@@ -72,86 +76,96 @@ import { BarChartBlock } from "../blocks/BarChartBlock";
 import { DoughnutChartBlock } from "../blocks/DoughnutChartBlock";
 import { AreaChartBlock } from "../blocks/AreaChartBlock";
 
+// Dynamic data blocks
+import { DynamicTableBlock } from "../blocks/DynamicTableBlock";
+import { DynamicChartBlock } from "../blocks/DynamicChartBlock";
+
 export const config: Config = {
   components: {
     // Layout
-    Section: SectionBlock,
-    Container: ContainerBlock,
-    TwoColumn: TwoColumnBlock,
-    ThreeColumn: ThreeColumnBlock,
-    TwoRow: TwoRowBlock,
-    ThreeRow: ThreeRowBlock,
-    Header2Col: Header2ColBlock,
-    TwoColFooter: TwoColFooterBlock,
-    Sidebar2Row: Sidebar2RowBlock,
-    Grid2x2: Grid2x2Block,
-    Layout1: Layout1Block,
-    Layout2: Layout2Block,
-    Layout3: Layout3Block,
-    Layout4: Layout4Block,
-    Layout5: Layout5Block,
-    Layout6: Layout6Block,
-    Layout7: Layout7Block,
-    Layout8: Layout8Block,
+    Section: withAnimation(withResize(SectionBlock)),
+    Container: withAnimation(withResize(ContainerBlock)),
+    TwoColumn: withAnimation(withResize(TwoColumnBlock)),
+    ThreeColumn: withAnimation(withResize(ThreeColumnBlock)),
+    TwoRow: withAnimation(withResize(TwoRowBlock)),
+    ThreeRow: withAnimation(withResize(ThreeRowBlock)),
+    Header2Col: withAnimation(withResize(Header2ColBlock)),
+    TwoColFooter: withAnimation(withResize(TwoColFooterBlock)),
+    Sidebar2Row: withAnimation(withResize(Sidebar2RowBlock)),
+    Grid2x2: withAnimation(withResize(Grid2x2Block)),
+    Navbar: withAnimation(NavbarBlock),
+    Layout1: withAnimation(withResize(Layout1Block)),
+    Layout2: withAnimation(withResize(Layout2Block)),
+    Layout3: withAnimation(withResize(Layout3Block)),
+    Layout4: withAnimation(withResize(Layout4Block)),
+    Layout5: withAnimation(withResize(Layout5Block)),
+    Layout6: withAnimation(withResize(Layout6Block)),
+    Layout7: withAnimation(withResize(Layout7Block)),
+    Layout8: withAnimation(withResize(Layout8Block)),
 
     // Text
-    Heading1: Heading1Block,
-    Heading2: Heading2Block,
-    Heading3: Heading3Block,
-    Heading4: Heading4Block,
-    Heading5: Heading5Block,
-    Heading6: Heading6Block,
-    Paragraph: ParagraphBlock,
-    Span: SpanBlock,
+    Heading1: withAnimation(withResize(Heading1Block)),
+    Heading2: withAnimation(withResize(Heading2Block)),
+    Heading3: withAnimation(withResize(Heading3Block)),
+    Heading4: withAnimation(withResize(Heading4Block)),
+    Heading5: withAnimation(withResize(Heading5Block)),
+    Heading6: withAnimation(withResize(Heading6Block)),
+    Paragraph: withAnimation(withResize(ParagraphBlock)),
+    Span: withAnimation(withResize(SpanBlock)),
 
     // Basic
-    Button: ButtonBlock,
-    Image: ImageBlock,
+    Button: withAnimation(withResize(ButtonBlock)),
+    Image: withAnimation(withResize(ImageBlock)),
 
     // Media
-    Video: VideoBlock,
-    Audio: AudioBlock,
-    Marquee: MarqueeBlock,
-    Icon: IconBlock,
-    Embed: EmbedBlock,
+    Video: withAnimation(withResize(VideoBlock)),
+    Audio: withAnimation(withResize(AudioBlock)),
+    Marquee: withAnimation(withResize(MarqueeBlock)),
+    Icon: withAnimation(withResize(IconBlock)),
+    Embed: withAnimation(withResize(EmbedBlock)),
 
     // Link
-    Link: LinkBlock,
+    Link: withAnimation(withResize(LinkBlock)),
+    PageLink: withAnimation(PageLink),
 
     // Form
-    Form: FormBlock,
-    Input: InputBlock,
-    Textarea: TextareaBlock,
-    Select: SelectBlock,
-    Checkbox: CheckboxBlock,
-    Radio: RadioBlock,
-    SubmitButton: SubmitButtonBlock,
+    Form: withAnimation(withResize(FormBlock)),
+    Input: withAnimation(withResize(InputBlock)),
+    Textarea: withAnimation(withResize(TextareaBlock)),
+    Select: withAnimation(withResize(SelectBlock)),
+    Checkbox: withAnimation(withResize(CheckboxBlock)),
+    Radio: withAnimation(withResize(RadioBlock)),
+    SubmitButton: withAnimation(withResize(SubmitButtonBlock)),
 
     // Content
-    OrderedList: OrderedListBlock,
-    UnorderedList: UnorderedListBlock,
-    ListItem: ListItemBlock,
-    Blockquote: BlockquoteBlock,
-    Code: CodeBlock,
-    Divider: DividerBlock,
-    Badge: BadgeBlock,
-    Spacer: SpacerBlock,
-    Table: TableBlock,
-    Accordion: AccordionBlock,
-    Tabs: TabsBlock,
-    Card: CardBlock,
+    OrderedList: withAnimation(withResize(OrderedListBlock)),
+    UnorderedList: withAnimation(withResize(UnorderedListBlock)),
+    ListItem: withAnimation(withResize(ListItemBlock)),
+    Blockquote: withAnimation(withResize(BlockquoteBlock)),
+    Code: withAnimation(withResize(CodeBlock)),
+    Divider: withAnimation(withResize(DividerBlock)),
+    Badge: withAnimation(withResize(BadgeBlock)),
+    Spacer: withAnimation(withResize(SpacerBlock)),
+    Table: withAnimation(withResize(TableBlock)),
+    Accordion: withAnimation(withResize(AccordionBlock)),
+    Tabs: withAnimation(withResize(TabsBlock)),
+    Card: withAnimation(withResize(CardBlock)),
 
     // Charts
-    BarChart: BarChartBlock,
-    DoughnutChart: DoughnutChartBlock,
-    AreaChart: AreaChartBlock,
+    BarChart: withAnimation(withResize(BarChartBlock)),
+    DoughnutChart: withAnimation(withResize(DoughnutChartBlock)),
+    AreaChart: withAnimation(withResize(AreaChartBlock)),
+
+    // Dynamic
+    DynamicTable: withAnimation(withResize(DynamicTableBlock)),
+    DynamicChart: withAnimation(withResize(DynamicChartBlock)),
   },
   categories: {
     Layout: {
       components: [
         "Section", "Container", "TwoColumn", "ThreeColumn",
         "TwoRow", "ThreeRow", "Header2Col", "TwoColFooter",
-        "Sidebar2Row", "Grid2x2",
+        "Sidebar2Row", "Grid2x2", "Navbar",
         "Layout1", "Layout2", "Layout3", "Layout4",
         "Layout5", "Layout6", "Layout7", "Layout8",
       ],
@@ -166,7 +180,7 @@ export const config: Config = {
       components: ["Video", "Audio", "Marquee", "Icon", "Embed"],
     },
     Link: {
-      components: ["Link"],
+      components: ["Link", "PageLink"],
     },
     Form: {
       components: ["Form", "Input", "Textarea", "Select", "Checkbox", "Radio", "SubmitButton"],
@@ -176,6 +190,9 @@ export const config: Config = {
     },
     Charts: {
       components: ["BarChart", "DoughnutChart", "AreaChart"],
+    },
+    Dynamic: {
+      components: ["DynamicTable", "DynamicChart"],
     },
   },
 };

@@ -13,6 +13,7 @@ const ALLOWED_CHILDREN = [
 export const Layout1Block = {
     fields: {
         gap: { type: "text" },
+        padding: { type: "text" },
         hero: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -29,23 +30,37 @@ export const Layout1Block = {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
         gap: "20px",
+        padding: "0px",
+        margin: "0px",
+        borderRadius: "4px",
+        background: "#6366f1",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, hero: Hero, col1: Col1, col2: Col2, col3: Col3 } = props;
+        const { editMode: isEdit, gap, padding, hero: Hero, col1: Col1, col2: Col2, col3: Col3 } = props;
 
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexDirection: "column",
                     gap,
                     border: isEdit ? "2px dashed #6366f1" : "none",
-                    padding: isEdit ? "20px" : undefined,
+                    padding: padding || (isEdit ? "20px" : undefined),
+                    margin: props.margin ?? "0px",
                     position: "relative",
                 }}
             >
@@ -55,11 +70,11 @@ export const Layout1Block = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#6366f1",
+                            background: props.background ?? "#6366f1",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
-                            borderRadius: "4px",
+                            borderRadius: props.borderRadius ?? "4px",
                         }}
                     >
                         Layout 1
@@ -69,21 +84,21 @@ export const Layout1Block = {
                 {/* Full-width hero */}
                 <div style={{ minHeight: isEdit ? "80px" : undefined }}>
                     <Hero />
-                </div>
+                    </div>
 
-                {/* 3 columns below */}
+                    {/* 3 columns below */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap }}>
                     <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                         <Col1 />
-                    </div>
+                        </div>
                     <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                         <Col2 />
-                    </div>
+                        </div>
                     <div style={{ flex: "1 1 200px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                         <Col3 />
-                    </div>
-                </div>
-            </div>
-        );
+                        </div>
+                        </div>
+                        </div>
+                        );
     },
 };

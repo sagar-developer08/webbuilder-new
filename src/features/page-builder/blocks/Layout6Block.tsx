@@ -13,6 +13,7 @@ const ALLOWED_CHILDREN = [
 export const Layout6Block = {
     fields: {
         gap: { type: "text" },
+        padding: { type: "text" },
         col1: {
             type: "slot",
             allow: ALLOWED_CHILDREN,
@@ -29,23 +30,37 @@ export const Layout6Block = {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
         gap: "20px",
+        padding: "0px",
+        margin: "0px",
+        borderRadius: "4px",
+        background: "#6366f1",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, col1: Col1, col2: Col2, col3: Col3, col4: Col4 } = props;
+        const { editMode: isEdit, gap, padding, col1: Col1, col2: Col2, col3: Col3, col4: Col4 } = props;
 
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexWrap: "wrap",
                     gap,
                     border: isEdit ? "2px dashed #6366f1" : "none",
-                    padding: isEdit ? "20px" : undefined,
+                    padding: padding || (isEdit ? "20px" : undefined),
+                    margin: props.margin ?? "0px",
                     position: "relative",
                 }}
             >
@@ -55,11 +70,11 @@ export const Layout6Block = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#6366f1",
+                            background: props.background ?? "#6366f1",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
-                            borderRadius: "4px",
+                            borderRadius: props.borderRadius ?? "4px",
                         }}
                     >
                         Layout 6
@@ -68,17 +83,17 @@ export const Layout6Block = {
 
                 <div style={{ flex: "1 1 150px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                     <Col1 />
-                </div>
+                    </div>
                 <div style={{ flex: "1 1 150px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                     <Col2 />
-                </div>
+                    </div>
                 <div style={{ flex: "1 1 150px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                     <Col3 />
-                </div>
+                    </div>
                 <div style={{ flex: "1 1 150px", minWidth: 0, minHeight: isEdit ? "60px" : undefined }}>
                     <Col4 />
-                </div>
-            </div>
-        );
+                    </div>
+                    </div>
+                    );
     },
 };

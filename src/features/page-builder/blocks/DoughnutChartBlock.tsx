@@ -16,6 +16,7 @@ export const DoughnutChartBlock = {
         colors: { type: "textarea" },
         centerText: { type: "text" },
         height: { type: "text" },
+        padding: { type: "text" },
     },
 
     defaultProps: {
@@ -25,6 +26,7 @@ export const DoughnutChartBlock = {
         colors: "#f59e0b,#e2e8f0",
         centerText: "45%",
         height: "300px",
+        padding: "20px",
     },
 
     render: (props: any) => {
@@ -67,7 +69,7 @@ export const DoughnutChartBlock = {
                 style={{
                     background: "#fff",
                     borderRadius: "12px",
-                    padding: "20px",
+                    padding: props.padding,
                     boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                     height: props.height,
                     position: "relative",

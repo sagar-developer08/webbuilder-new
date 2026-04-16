@@ -3,27 +3,41 @@ export const CodeBlock = {
         code: { type: "textarea" },
         language: { type: "text" },
         fontSize: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        backgroundColor: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
         code: 'console.log("Hello, World!");',
         language: "javascript",
         fontSize: "14px",
+        padding: "16px 20px",
+        margin: "0px",
+        borderRadius: "8px",
+        backgroundColor: "#1e293b",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <pre
                 style={{
-                    backgroundColor: "#1e293b",
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
+                    backgroundColor: props.backgroundColor ?? "#1e293b",
                     color: "#e2e8f0",
-                    padding: "16px 20px",
-                    borderRadius: "8px",
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
+                    borderRadius: props.borderRadius ?? "8px",
                     overflow: "auto",
                     fontSize: props.fontSize,
                     fontFamily: "'Fira Code', 'Cascadia Code', 'Consolas', monospace",
                     lineHeight: "1.6",
-                    margin: "16px 0",
                 }}
             >
                 {props.language && (

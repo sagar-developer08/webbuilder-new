@@ -27,6 +27,9 @@ export const SectionBlock = {
                 "Layout4", "Layout5", "Layout6", "Layout7", "Layout8",
             ],
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        background: { type: "text" },
     },
 
     defaultProps: {
@@ -34,6 +37,9 @@ export const SectionBlock = {
         padding: "60px",
         height: "auto",
         width: "auto",
+        margin: "0px",
+        borderRadius: "4px",
+        background: "#3b82f6",
     },
 
     render: (props: any) => {
@@ -49,6 +55,7 @@ export const SectionBlock = {
                     border: editMode ? "2px dashed #3b82f6" : "none",
                     minHeight: editMode ? "120px" : undefined,
                     position: "relative",
+                    margin: props.margin ?? "0px",
                 }}
             >
                 {editMode && (
@@ -57,11 +64,11 @@ export const SectionBlock = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#3b82f6",
+                            background: props.background ?? "#3b82f6",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
-                            borderRadius: "4px",
+                            borderRadius: props.borderRadius ?? "4px",
                         }}
                     >
                         Section

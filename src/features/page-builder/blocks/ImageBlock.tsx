@@ -1,6 +1,7 @@
 export const ImageBlock = {
     fields: {
         src: { type: "text" },
+        padding: { type: "text" },
         // Width as a percentage (0–100) for easy resizing
         width: {
             type: "number",
@@ -13,6 +14,7 @@ export const ImageBlock = {
 
     defaultProps: {
         src: "https://via.placeholder.com/400",
+        padding: "0px",
         width: 100,
         borderRadius: "8px",
     },
@@ -28,6 +30,7 @@ export const ImageBlock = {
                     maxWidth: "100%",
                     height: "auto",
                     display: "block",
+                    padding: props.padding,
                     borderRadius: props.borderRadius,
                 }}
                 alt=""

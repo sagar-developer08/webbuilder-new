@@ -13,6 +13,7 @@ const ALLOWED_CHILDREN = [
 export const Layout8Block = {
     fields: {
         gap: { type: "text" },
+        padding: { type: "text" },
         sidebarWidth: { type: "text" },
         sidebarHeight: { type: "text" },
         main: {
@@ -23,25 +24,39 @@ export const Layout8Block = {
             type: "slot",
             allow: ALLOWED_CHILDREN,
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        background: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
         gap: "20px",
+        padding: "0px",
         sidebarWidth: "280px",
         sidebarHeight: "100vh",
+        margin: "0px",
+        borderRadius: "4px",
+        background: "#6366f1",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
-        const { editMode: isEdit, gap, sidebarWidth, sidebarHeight, main: Main, sidebar: Sidebar } = props;
+        const { editMode: isEdit, gap, padding, sidebarWidth, sidebarHeight, main: Main, sidebar: Sidebar } = props;
 
         return (
             <div
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     display: "flex",
                     flexWrap: "wrap",
                     gap,
                     border: isEdit ? "2px dashed #6366f1" : "none",
-                    padding: isEdit ? "20px" : undefined,
+                    padding: padding || (isEdit ? "20px" : undefined),
+                    margin: props.margin ?? "0px",
                     position: "relative",
                 }}
             >
@@ -51,11 +66,11 @@ export const Layout8Block = {
                             position: "absolute",
                             top: "-10px",
                             left: "10px",
-                            background: "#6366f1",
+                            background: props.background ?? "#6366f1",
                             color: "#fff",
                             padding: "2px 8px",
                             fontSize: "12px",
-                            borderRadius: "4px",
+                            borderRadius: props.borderRadius ?? "4px",
                         }}
                     >
                         Layout 8

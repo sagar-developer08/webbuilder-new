@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'
+import { AuthProvider } from '@/features/auth/AuthContext'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,8 +23,10 @@ interface AppProvidersProps {
 export function AppProviders({ children }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+      <AuthProvider>
+        {children}
+        {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+      </AuthProvider>
     </QueryClientProvider>
   )
 }

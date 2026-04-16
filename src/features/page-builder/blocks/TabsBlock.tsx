@@ -4,11 +4,17 @@ export const TabsBlock = {
     fields: {
         tabLabels: { type: "text" },
         tabContents: { type: "textarea" },
+        padding: { type: "text" },
+        margin: { type: "text" },
+        backgroundColor: { type: "text" },
     },
 
     defaultProps: {
         tabLabels: "Overview, Features, Pricing",
         tabContents: "This is the overview tab content.\nThese are the features of the product.\nPricing starts at $9.99/month.",
+        padding: "0px",
+        margin: "0px",
+        backgroundColor: "transparent",
     },
 
     render: (props: any) => {
@@ -21,15 +27,15 @@ export const TabsBlock = {
             .split("\n")
             .map((c: string) => c.trim());
 
-        return <TabsRenderer labels={labels} contents={contents} />;
+        return <TabsRenderer labels={labels} contents={contents} padding={props.padding} margin={props.margin} backgroundColor={props.backgroundColor} />;
     },
 };
 
-function TabsRenderer({ labels, contents }: { labels: string[]; contents: string[] }) {
+function TabsRenderer({ labels, contents, padding, margin, backgroundColor }: { labels: string[]; contents: string[]; padding?: string; margin?: string; backgroundColor?: string }) {
     const [activeTab, setActiveTab] = useState(0);
 
     return (
-        <div style={{ margin: "16px 0" }}>
+        <div style={{ margin: margin ?? "16px 0", padding: padding }}>
             <div
                 style={{
                     display: "flex",
@@ -45,7 +51,7 @@ function TabsRenderer({ labels, contents }: { labels: string[]; contents: string
                             padding: "10px 20px",
                             border: "none",
                             borderBottom: activeTab === i ? "2px solid #2563eb" : "2px solid transparent",
-                            backgroundColor: "transparent",
+                            backgroundColor: backgroundColor ?? "transparent",
                             color: activeTab === i ? "#2563eb" : "#64748b",
                             fontWeight: activeTab === i ? 600 : 400,
                             fontSize: "14px",

@@ -2,6 +2,7 @@ export const Heading2Block = {
     fields: {
         text: { type: "text" },
         color: { type: "text" },
+        padding: { type: "text" },
         textAlign: {
             type: "select",
             options: [
@@ -10,23 +11,33 @@ export const Heading2Block = {
                 { label: "Right", value: "right" },
             ],
         },
+        margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
         text: "Heading 2",
         color: "#000000",
+        padding: "0px",
         textAlign: "left",
+        margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
         return (
             <h2
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     fontSize: "2rem",
                     fontWeight: 700,
                     color: props.color,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     textAlign: props.textAlign,
-                    margin: "0.5em 0",
                 }}
             >
                 {props.text}

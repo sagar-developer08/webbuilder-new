@@ -1,6 +1,7 @@
 export const AudioBlock = {
     fields: {
         audioUrl: { type: "text" },
+        padding: { type: "text" },
         controls: {
             type: "select",
             options: [
@@ -8,11 +9,18 @@ export const AudioBlock = {
                 { label: "Hide Controls", value: "false" },
             ],
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        backgroundColor: { type: "text" },
     },
 
     defaultProps: {
         audioUrl: "",
+        padding: "0px",
         controls: "true",
+        margin: "0px",
+        borderRadius: "8px",
+        backgroundColor: "#f1f5f9",
     },
 
     render: (props: any) => {
@@ -21,11 +29,12 @@ export const AudioBlock = {
                 <div
                     style={{
                         padding: "20px",
-                        backgroundColor: "#f1f5f9",
+                        margin: props.margin ?? "0px",
+                        backgroundColor: props.backgroundColor ?? "#f1f5f9",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        borderRadius: "8px",
+                        borderRadius: props.borderRadius ?? "8px",
                         border: "2px dashed #cbd5e1",
                         color: "#94a3b8",
                         fontSize: "14px",
@@ -37,11 +46,21 @@ export const AudioBlock = {
         }
 
         return (
-            <audio
-                src={props.audioUrl}
-                controls={props.controls === "true"}
-                style={{ width: "100%" }}
-            />
+            <div
+                style={{
+                    margin: props.margin ?? "0px",
+                    borderRadius: props.borderRadius ?? "8px",
+                    backgroundColor: props.backgroundColor ?? "#f1f5f9",
+                    padding: props.padding,
+                    overflow: "hidden",
+                }}
+            >
+                <audio
+                    src={props.audioUrl}
+                    controls={props.controls === "true"}
+                    style={{ width: "100%" }}
+                />
+            </div>
         );
     },
 };

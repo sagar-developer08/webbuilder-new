@@ -24,6 +24,7 @@ export const AreaChartBlock = {
         dataset2Data: { type: "textarea" },
         dataset2Color: { type: "text" },
         height: { type: "text" },
+        padding: { type: "text" },
     },
 
     defaultProps: {
@@ -36,6 +37,7 @@ export const AreaChartBlock = {
         dataset2Data: "20,30,25,35,30,40,38,50,45,55,50,60",
         dataset2Color: "#f59e0b",
         height: "300px",
+        padding: "20px",
     },
 
     render: (props: any) => {
@@ -103,7 +105,7 @@ export const AreaChartBlock = {
                 style={{
                     background: "#fff",
                     borderRadius: "12px",
-                    padding: "20px",
+                    padding: props.padding,
                     boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                     height: props.height,
                 }}

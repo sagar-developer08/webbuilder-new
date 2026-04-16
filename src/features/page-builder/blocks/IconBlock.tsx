@@ -3,14 +3,22 @@ export const IconBlock = {
         iconName: { type: "text" },
         size: { type: "text" },
         color: { type: "text" },
+        padding: { type: "text" },
         href: { type: "text" },
+        margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
         iconName: "Star",
         size: "24px",
         color: "#000000",
+        padding: "0px",
         href: "",
+        margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -21,6 +29,8 @@ export const IconBlock = {
                 style={{
                     fontSize: props.size,
                     color: props.color,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -39,11 +49,13 @@ export const IconBlock = {
                     href={props.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ display: "inline-flex", textDecoration: "none" }}
-                >
-                    {iconContent}
-                </a>
-            );
+                    style={{ width: props.width !== "auto" ? props.width : undefined,
+                        height: props.height !== "auto" ? props.height : undefined,
+                        display: "inline-flex", textDecoration: "none" }}
+                        >
+                        {iconContent}
+                        </a>
+                        );
         }
 
         return iconContent;

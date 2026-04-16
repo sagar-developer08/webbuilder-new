@@ -22,6 +22,7 @@ export const BarChartBlock = {
         dataset2Data: { type: "textarea" },
         dataset2Color: { type: "text" },
         height: { type: "text" },
+        padding: { type: "text" },
     },
 
     defaultProps: {
@@ -34,6 +35,7 @@ export const BarChartBlock = {
         dataset2Data: "50,55,42,60,48,75,52,58,68,62",
         dataset2Color: "#f59e0b",
         height: "300px",
+        padding: "20px",
     },
 
     render: (props: any) => {
@@ -86,7 +88,7 @@ export const BarChartBlock = {
                 style={{
                     background: "#fff",
                     borderRadius: "12px",
-                    padding: "20px",
+                    padding: props.padding,
                     boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                     height: props.height,
                 }}

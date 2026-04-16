@@ -3,12 +3,20 @@ export const OrderedListBlock = {
         listItems: { type: "textarea" },
         fontSize: { type: "text" },
         color: { type: "text" },
+        padding: { type: "text" },
+        margin: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
         listItems: "Step 1\nStep 2\nStep 3",
         fontSize: "16px",
         color: "#374151",
+        padding: "0px",
+        margin: "0px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -20,8 +28,12 @@ export const OrderedListBlock = {
         return (
             <ol
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     fontSize: props.fontSize,
                     color: props.color,
+                    padding: props.padding,
+                    margin: props.margin ?? "0px",
                     paddingLeft: "24px",
                     listStyleType: "decimal",
                     lineHeight: "1.8",

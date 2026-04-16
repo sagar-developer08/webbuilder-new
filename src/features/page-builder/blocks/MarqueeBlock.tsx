@@ -26,6 +26,7 @@ export const MarqueeBlock = {
                 { label: "No", value: "no" },
             ],
         },
+        padding: { type: "text" },
     },
 
     defaultProps: {
@@ -36,6 +37,7 @@ export const MarqueeBlock = {
         color: "#ffffff",
         fontSize: "18px",
         pauseOnHover: "yes",
+        padding: "12px 0",
     },
 
     render: (props: any) => {
@@ -63,7 +65,7 @@ export const MarqueeBlock = {
                     overflow: "hidden",
                     whiteSpace: "nowrap",
                     width: "100%",
-                    padding: "12px 0",
+                    padding: props.padding,
                 }}
             >
                 <style>{keyframesCSS}</style>

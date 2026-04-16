@@ -11,6 +11,10 @@ export const SubmitButtonBlock = {
                 { label: "No", value: "false" },
             ],
         },
+        margin: { type: "text" },
+        borderRadius: { type: "text" },
+        width: { type: "text" },
+        height: { type: "text" },
     },
 
     defaultProps: {
@@ -19,6 +23,10 @@ export const SubmitButtonBlock = {
         color: "#ffffff",
         padding: "12px 24px",
         fullWidth: "false",
+        margin: "0px",
+        borderRadius: "6px",
+        width: "auto",
+        height: "auto",
     },
 
     render: (props: any) => {
@@ -26,11 +34,14 @@ export const SubmitButtonBlock = {
             <button
                 type="submit"
                 style={{
+                    width: props.width !== "auto" ? props.width : undefined,
+                    height: props.height !== "auto" ? props.height : undefined,
                     backgroundColor: props.backgroundColor,
                     color: props.color,
                     padding: props.padding,
+                    margin: props.margin ?? "0px",
                     border: "none",
-                    borderRadius: "6px",
+                    borderRadius: props.borderRadius ?? "6px",
                     fontSize: "14px",
                     fontWeight: 600,
                     cursor: "pointer",
